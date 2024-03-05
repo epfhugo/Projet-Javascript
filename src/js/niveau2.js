@@ -66,33 +66,35 @@ export default class niveau2 extends Phaser.Scene {
     }
 
     if (clavier.up.isDown) {
-    if (clavier.up.isDown) {
       this.player.setVelocityY(-300);
       if (this.player.texture.key === "vaisseau_marche") {
           this.player.setTexture("vaisseau_haut");
       } else if (this.player.texture.key === "vaisseau_recule") {
           this.player.setTexture("vaisseau_bas_gauche");
       }
-  } else if (clavier.down.isDown) {
-      if (this.player.texture.key === "vaisseau_marche") {
-          this.player.setTexture("vaisseau_haut");
-      } else if (this.player.texture.key === "vaisseau_recule") {
-          this.player.setTexture("vaisseau_bas_gauche");
+    } else if (clavier.down.isDown) {
+        if (this.player.texture.key === "vaisseau_marche") {
+            this.player.setTexture("vaisseau_haut");
+        } else if (this.player.texture.key === "vaisseau_recule") {
+            this.player.setTexture("vaisseau_bas_gauche");
+        }
+    } else if (clavier.down.isDown) {
+        this.player.setVelocityY(300);
+        if (this.player.texture.key === "vaisseau_marche") {
+            this.player.setTexture("vaisseau_bas");
+        } else if (this.player.texture.key === "vaisseau_recule") {
+            this.player.setTexture("vaisseau_haut_gauche");
+        }
+    } else {
+        if (this.player.texture.key === "vaisseau_marche") {
+            this.player.setTexture("vaisseau_bas");
+        } else if (this.player.texture.key === "vaisseau_recule") {
+            this.player.setTexture("vaisseau_haut_gauche");
+        }
       }
-  } else if (clavier.down.isDown) {
-      this.player.setVelocityY(300);
-      if (this.player.texture.key === "vaisseau_marche") {
-          this.player.setTexture("vaisseau_bas");
-      } else if (this.player.texture.key === "vaisseau_recule") {
-          this.player.setTexture("vaisseau_haut_gauche");
-      }
-  } else {
-      if (this.player.texture.key === "vaisseau_marche") {
-          this.player.setTexture("vaisseau_bas");
-      } else if (this.player.texture.key === "vaisseau_recule") {
-          this.player.setTexture("vaisseau_haut_gauche");
-      }
-  } else {
+    }
+
+  else {
       // Réinitialisation de la vélocité verticale lorsque la touche du haut ou du bas n'est pas enfoncée
       this.player.setVelocityY(0);
       if (this.player.texture.key === "vaisseau_haut" || this.player.texture.key === "vaisseau_bas") {
@@ -106,5 +108,3 @@ export default class niveau2 extends Phaser.Scene {
           this.player.setTexture("vaisseau_recule");
       }
   }
-}
-}
