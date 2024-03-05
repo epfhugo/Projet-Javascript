@@ -73,19 +73,7 @@ export default class niveau2 extends Phaser.Scene {
           this.player.setTexture("vaisseau_bas_gauche");
       }
   } else if (clavier.down.isDown) {
-      if (this.player.texture.key === "vaisseau_marche") {
-          this.player.setTexture("vaisseau_haut");
-      } else if (this.player.texture.key === "vaisseau_recule") {
-          this.player.setTexture("vaisseau_bas_gauche");
-      }
-  } else if (clavier.down.isDown) {
       this.player.setVelocityY(300);
-      if (this.player.texture.key === "vaisseau_marche") {
-          this.player.setTexture("vaisseau_bas");
-      } else if (this.player.texture.key === "vaisseau_recule") {
-          this.player.setTexture("vaisseau_haut_gauche");
-      }
-  } else {
       if (this.player.texture.key === "vaisseau_marche") {
           this.player.setTexture("vaisseau_bas");
       } else if (this.player.texture.key === "vaisseau_recule") {
@@ -99,11 +87,6 @@ export default class niveau2 extends Phaser.Scene {
       } else if (this.player.texture.key === "vaisseau_haut_gauche" || this.player.texture.key === "vaisseau_bas_gauche") {
           this.player.setTexture("vaisseau_recule");
       }
-      if (this.player.texture.key === "vaisseau_haut" || this.player.texture.key === "vaisseau_bas") {
-          this.player.setTexture("vaisseau_marche");
-      } else if (this.player.texture.key === "vaisseau_haut_gauche" || this.player.texture.key === "vaisseau_bas_gauche") {
-          this.player.setTexture("vaisseau_recule");
-      }
-  }
+  } 
 }
 }
