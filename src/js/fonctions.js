@@ -7,9 +7,9 @@ export function doNothing() {
 
 export function doAlsoNothing() {
     // cette fonction ne fait rien non plus.
- }
+}
 
- export function tirer(player) {
+export function tirer(player) {
     var coefDir;
   if (player.direction == 'left') { coefDir = -1; } else { coefDir = 1 }
     // on crée la balle a coté du joueur
@@ -20,4 +20,4 @@ export function doAlsoNothing() {
     bullet.body.onWorldBounds = true; 
     bullet.body.allowGravity =false;
     bullet.setVelocity(1000 * coefDir, 0); // vitesse en x et en y
-  }  
+}  
