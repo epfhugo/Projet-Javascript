@@ -5,7 +5,7 @@
         {
          "draworder":"topdown",
          "id":6,
-         "name":"ennemi",
+         "name":"calque_ennemi",
          "objects":[
                 {
                  "height":0,

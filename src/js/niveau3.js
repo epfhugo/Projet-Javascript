@@ -11,9 +11,9 @@ export default class niveau3 extends Phaser.Scene {
   }
   preload() {
 
-    this.load.image("vaisseau_marche", "src/assets/vaisseau_marche.png"); 
     this.load.image("Tuiles_Mars", "src/assets/Tile_NinveauMars.png");
     this.load.tilemapTiledJSON("carte_mars", "src/assets/carte_mars.json"); 
+    this.load.image("vaisseau_marche", "src/assets/vaisseau_marche.png");
   }
 
   create() {
@@ -78,46 +78,40 @@ export default class niveau3 extends Phaser.Scene {
 
   update() {
 
-    if (this.clavier.left.isDown) {
+    if (clavier.left.isDown) {
       this.player.setVelocityX(-450);
       this.player.setTexture("vaisseau_recule");
       this.player.direction = 'left'
 
-    } else if (this.clavier.right.isDown) {
+    } else if (clavier.right.isDown) {
       this.player.setVelocityX(450);
       this.player.setTexture("vaisseau_marche");
       this.player.direction = 'right'
 
     } else {
       this.player.setVelocityX(0);
-    }
 
-    if (this.clavier.up.isDown) {
+    }
+  
+
+    if (clavier.up.isDown) {
       this.player.setVelocityY(-500);
       if (this.player.texture.key === "vaisseau_marche") {
-          this.player.setTexture("vaisseau_haut");
+          this.player.setTexture("vaisseau_haut_2");
       } else if (this.player.texture.key === "vaisseau_recule") {
-          this.player.setTexture("vaisseau_bas_gauche");
+          this.player.setTexture("vaisseau_haut_gauche");
       }
-    } else if (this.clavier.down.isDown) {
-        this.player.setVelocityY(500);
-        if (this.player.texture.key === "vaisseau_marche") {
-            this.player.setTexture("vaisseau_bas");
-        } else if (this.player.texture.key === "vaisseau_recule") {
-            this.player.setTexture("vaisseau_haut_gauche");
-        }
-    } else {
-        // Réinitialisation de la vélocité verticale lorsque la touche du haut ou du bas n'est pas enfoncée
-        this.player.setVelocityY(0);
-        if (this.player.texture.key === "vaisseau_haut" || this.player.texture.key === "vaisseau_bas") {
-            this.player.setTexture("vaisseau_marche");
-        } else if (this.player.texture.key === "vaisseau_haut_gauche" || this.player.texture.key === "vaisseau_bas_gauche") {
-            this.player.setTexture("vaisseau_recule");
-        }
-    } 
+  } else if (clavier.down.isDown) {
+      this.player.setVelocityY(500);
+      if (this.player.texture.key === "vaisseau_marche") {
+          this.player.setTexture("vaisseau_haut_2");
+      } else if (this.player.texture.key === "vaisseau_recule") {
+          this.player.setTexture("vaisseau_haut_gauche");
+      }
+  } else {
+      // Réinitialisation de la vélocité verticale lorsque la touche du haut ou du bas n'est pas enfoncée
+      this.player.setVelocityY(0);
 
-    if ( Phaser.Input.Keyboard.JustDown(this.boutonFeu)) {
-      tirer(this.player, groupeBullets);
-    }
   }
+}
 }
