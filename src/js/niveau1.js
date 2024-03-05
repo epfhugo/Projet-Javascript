@@ -1,6 +1,7 @@
 import {tirer} from "/src/js/fonctions.js";
 
-var groupeBullets;  
+var groupeBullets; 
+var groupe_ennemis; 
 
 export default class niveau1 extends Phaser.Scene {
 
@@ -12,7 +13,6 @@ export default class niveau1 extends Phaser.Scene {
   }
 
   preload() {
-
 
     this.load.image("vaisseau_marche", "src/assets/vaisseau_marche.png"); 
     this.load.image("Tuiles_Terre", "src/assets/Tile_NiveauTerre.png");
@@ -28,7 +28,6 @@ export default class niveau1 extends Phaser.Scene {
       const carte_terre = this.add.tilemap("carte_terre");
       const tileset = carte_terre.addTilesetImage("Tile_NiveauTerre","Tuiles_Terre");
   
-      
       const Fond = carte_terre.createLayer(
         "Fond",
         tileset
@@ -62,13 +61,16 @@ export default class niveau1 extends Phaser.Scene {
       this.player = this.physics.add.image(100, 450,"vaisseau_marche");
       this.player.setCollideWorldBounds(true); 
       this.player.setBounce(0.2);
-  
+
+
       // redimensionnement du monde avec les dimensions calculées via tiled
       this.physics.world.setBounds(0, 0, 6400, 610);
       // ajout du champs de la caméra de taille identique à celle du monde
       this.cameras.main.setBounds(0, 0, 6400, 610);
       // ancrage de la caméra sur le joueur
       this.cameras.main.startFollow(this.player);
+      this.player.setSize(128,64);
+
   
       // creation d'un attribut direction pour le joueur, initialisée avec 'right'
       this.player.direction = 'right'; 
@@ -91,21 +93,35 @@ export default class niveau1 extends Phaser.Scene {
       }
     });
   
-    // extraction des poitns depuis le calque calque_ennemis, stockage dans tab_points
-    const tab_points = carte_terre.getObjectLayer("calque_ennemi");   
+      // extraction des poitns depuis le calque calque_ennemis, stockage dans tab_points
+const tab_points = carte_terre.getObjectLayer("calque_ennemi");   
+groupe_ennemis = this.physics.add.group();
 
-    // on fait une boucle foreach, qui parcours chaque élements du tableau tab_points  
-    tab_points.objects.forEach(point => {
-        if (point.name == "ennemi") {
-          var nouvel_ennemi = this.physics.add.image("monstre_2");
-          nouvel_ennemi.setCollideWorldBounds(true); 
-          nouvel_ennemi.setBounce(0.2);
-          nouvel_ennemi.setVelocityX(500);
-        }
-    }); 
-  }
+// on fait une boucle foreach, qui parcours chaque élements du tableau tab_points  
+tab_points.objects.forEach(point => {
+    if (point.name == "ennemi") {
+      var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_2");
+      groupe_ennemis.add(nouvel_ennemi);
+    }
+}); 
+
+    /*****************************************************
+   *  ajout du modele de mobilite des ennemis *
+   ******************************************************/
+  // par défaut, on va a gauche en utilisant la meme animation que le personnage
+  groupe_ennemis.children.iterate(function iterateur(un_ennemi) {
+    un_ennemi.setVelocityX(-40);
+    un_ennemi.direction = "gauche";
+    un_ennemi.setTexture("monstre_2");
+  });
+
+}
 
   update() {
+
+    if ( Phaser.Input.Keyboard.JustDown(this.boutonFeu)) {
+      tirer(this.player, groupeBullets);
+    }
  
     if (this.clavier.left.isDown) {
       this.player.setVelocityX(-450);
@@ -139,9 +155,33 @@ export default class niveau1 extends Phaser.Scene {
       // Réinitialisation de la vélocité verticale lorsque la touche du haut ou du bas n'est pas enfoncée
       this.player.setVelocityY(0);
   }
-
-    if ( Phaser.Input.Keyboard.JustDown(this.boutonFeu)) {
-      tirer(this.player, groupeBullets);
+  groupe_ennemis.children.iterate(function iterateur(un_ennemi) {
+    if (un_ennemi.direction == "gauche" && un_ennemi.body.blocked.down) {
+      var coords = un_ennemi.getBottomLeft();
+      var tuileSuivante = calque_plateformes.getTileAtWorldXY(
+        coords.x,
+        coords.y + 10
+      );
+      if (tuileSuivante == null || un_ennemi.body.blocked.left) {
+        // on risque de marcher dans le vide, on tourne
+        un_ennemi.direction = "droite";
+        un_ennemi.setVelocityX(40);
+      }
+    } else if (un_ennemi.direction == "droite" && un_ennemi.body.blocked.down) {
+      var coords = un_ennemi.getBottomRight();
+      var tuileSuivante = calque_plateformes.getTileAtWorldXY(
+        coords.x,
+        coords.y + 10
+      );
+      if (tuileSuivante == null || un_ennemi.body.blocked.right) {
+        // on risque de marcher dans le vide, on tourne
+        un_ennemi.direction = "gauche";
+        un_ennemi.setVelocityX(-40);
+        
+      }
     }
-  }
+  });
 }
+
+}
+

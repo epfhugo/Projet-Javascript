@@ -19,5 +19,5 @@ export function tirer(player, groupeBullets) {
     // on acive la détection de l'evenement "collision au bornes"
     bullet.body.onWorldBounds = true; 
     bullet.body.allowGravity =false;
-    bullet.setVelocity(1000 * coefDir, 0); // vitesse en x et en y
+    bullet.setVelocity(2000 * coefDir, 0); // vitesse en x et en y
 }  

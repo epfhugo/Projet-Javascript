@@ -29,6 +29,8 @@ export default class selection extends Phaser.Scene {
    */
   preload() {
     // tous les assets du jeu sont placés dans le sous-répertoire src/assets/
+
+    this.load.image("monstre_1", "src/assets/monstre_1.png");
     this.load.image("monstre_2", "src/assets/monstre_2.png");
     this.load.image("help", "src/assets/help.png");
     this.load.image("bullet", "src/assets/balle.png");
@@ -40,7 +42,7 @@ export default class selection extends Phaser.Scene {
     this.load.image("vaisseau_haut_2", "src/assets/vaisseau_haut_2.png");
     this.load.image("vaisseau_haut_gauche", "src/assets/vaisseau_haut_gauche.png");
     this.load.image("vaisseau_arrêt", "src/assets/vaisseau_arrêt.png");
-
+    this.load.image("monstre_3", "src/assets/monstre_3.png");
 
     // chargement tuiles de jeu
     this.load.image("Phaser_tuilesdejeu", "src/assets/Tile_NiveauLune.png");
@@ -83,10 +85,12 @@ export default class selection extends Phaser.Scene {
     this.chiffre2.setScale(0.7);
     this.chiffre3.setScale(0.7);
 
+    /****************************
+    *  Ajout du player *
+    ****************************/
     this.player = this.physics.add.image(100, 450, "vaisseau_marche"); 
-
+    this.player.setSize(128,64);
     this.player.setCollideWorldBounds(true);
-
     this.player.setBounce(0.2);
 
     // redimensionnement du monde avec les dimensions calculées via tiled
