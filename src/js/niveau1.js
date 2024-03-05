@@ -92,47 +92,35 @@ export default class niveau1 extends Phaser.Scene {
           objet.destroy();
       }
     });
-  
-      // extraction des poitns depuis le calque calque_ennemis, stockage dans tab_points
-const tab_points = carte_terre.getObjectLayer("calque_ennemi");   
-groupe_ennemis = this.physics.add.group();
+    
+      
+    // extraction des poitns depuis le calque calque_ennemis, stockage dans tab_points
+    const tab_points = carte_terre.getObjectLayer("calque_ennemi");   
+    groupe_ennemis = this.physics.add.group();
 
-// on fait une boucle foreach, qui parcours chaque élements du tableau tab_points  
-tab_points.objects.forEach(point => {
-    if (point.name == "ennemi") {
-      var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_2");
-      groupe_ennemis.add(nouvel_ennemi);
-    }
-}); 
+    // on fait une boucle foreach, qui parcours chaque élements du tableau tab_points  
+    tab_points.objects.forEach(point => {
+        if (point.name == "ennemi") {
+          var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_2");    
+          nouvel_ennemi.setVelocityX(Phaser.Math.Between(-500, 500));
+          nouvel_ennemi.setVelocityY(Phaser.Math.Between(-500, 500));
+          nouvel_ennemi.setCollideWorldBounds(true); 
+          nouvel_ennemi.setBounce(1);
+        }
+    }); 
 
-    /*****************************************************
-   *  ajout du modele de mobilite des ennemis *
-   ******************************************************/
-  // par défaut, on va a gauche en utilisant la meme animation que le personnage
-  groupe_ennemis.children.iterate(function iterateur(un_ennemi) {
-    un_ennemi.setVelocityX(-40);
-    un_ennemi.direction = "gauche";
-    un_ennemi.setTexture("monstre_2");
-  });
-
-}
+  }
 
   update() {
 
-    if ( Phaser.Input.Keyboard.JustDown(this.boutonFeu)) {
-      tirer(this.player, groupeBullets);
-    }
- 
     if (this.clavier.left.isDown) {
       this.player.setVelocityX(-450);
       this.player.setTexture("vaisseau_recule");
       this.player.direction = 'left'
-
     } else if (this.clavier.right.isDown) {
       this.player.setVelocityX(450);
       this.player.setTexture("vaisseau_marche");
       this.player.direction = 'right'
-
     } else {
       this.player.setVelocityX(0);
     }
@@ -144,44 +132,23 @@ tab_points.objects.forEach(point => {
       } else if (this.player.texture.key === "vaisseau_recule") {
           this.player.setTexture("vaisseau_haut_gauche");
       }
-  } else if (this.clavier.down.isDown) {
-      this.player.setVelocityY(500);
-      if (this.player.texture.key === "vaisseau_marche") {
-          this.player.setTexture("vaisseau_haut_2");
-      } else if (this.player.texture.key === "vaisseau_recule") {
-          this.player.setTexture("vaisseau_haut_gauche");
-      }
-  } else {
-      // Réinitialisation de la vélocité verticale lorsque la touche du haut ou du bas n'est pas enfoncée
-      this.player.setVelocityY(0);
-  }
-  groupe_ennemis.children.iterate(function iterateur(un_ennemi) {
-    if (un_ennemi.direction == "gauche" && un_ennemi.body.blocked.down) {
-      var coords = un_ennemi.getBottomLeft();
-      var tuileSuivante = calque_plateformes.getTileAtWorldXY(
-        coords.x,
-        coords.y + 10
-      );
-      if (tuileSuivante == null || un_ennemi.body.blocked.left) {
-        // on risque de marcher dans le vide, on tourne
-        un_ennemi.direction = "droite";
-        un_ennemi.setVelocityX(40);
-      }
-    } else if (un_ennemi.direction == "droite" && un_ennemi.body.blocked.down) {
-      var coords = un_ennemi.getBottomRight();
-      var tuileSuivante = calque_plateformes.getTileAtWorldXY(
-        coords.x,
-        coords.y + 10
-      );
-      if (tuileSuivante == null || un_ennemi.body.blocked.right) {
-        // on risque de marcher dans le vide, on tourne
-        un_ennemi.direction = "gauche";
-        un_ennemi.setVelocityX(-40);
-        
-      }
+    } else if (this.clavier.down.isDown) {
+        this.player.setVelocityY(500);
+        if (this.player.texture.key === "vaisseau_marche") {
+            this.player.setTexture("vaisseau_haut_2");
+        } else if (this.player.texture.key === "vaisseau_recule") {
+            this.player.setTexture("vaisseau_haut_gauche");
+        }
+    } else {
+        // Réinitialisation de la vélocité verticale lorsque la touche du haut ou du bas n'est pas enfoncée
+        this.player.setVelocityY(0);
     }
-  });
-}
+
+    if ( Phaser.Input.Keyboard.JustDown(this.boutonFeu)) {
+      tirer(this.player, groupeBullets);
+    }
+
+  }
 
 }
 
