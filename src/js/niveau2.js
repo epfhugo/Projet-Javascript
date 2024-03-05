@@ -1,3 +1,5 @@
+
+var clavier;
 export default class niveau2 extends Phaser.Scene {
   // constructeur de la classe
   constructor() {
@@ -20,7 +22,6 @@ export default class niveau2 extends Phaser.Scene {
     const tileset = carte_lune.addTilesetImage("Tile_NiveauMoon", "Phaser_tuilesdejeu");
 
     
-
     const Fond = carte_lune.createLayer(
       "Fond",
       tileset
@@ -41,9 +42,9 @@ export default class niveau2 extends Phaser.Scene {
     this.player.setBounce(0.2);
 
     // redimensionnement du monde avec les dimensions calculées via tiled
-    this.physics.world.setBounds(0, 0, 1920, 640);
+    this.physics.world.setBounds(0, 0, 6400, 640);
     // ajout du champs de la caméra de taille identique à celle du monde
-    this.cameras.main.setBounds(0, 0, 1920, 640);
+    this.cameras.main.setBounds(0, 0, 6400, 640);
     // ancrage de la caméra sur le joueur
     this.cameras.main.startFollow(this.player);
     
