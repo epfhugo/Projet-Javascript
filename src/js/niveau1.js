@@ -1,4 +1,4 @@
-import { tirer, chocAvecEnnemis } from "/src/js/fonctions.js";
+import { tirer, chocAvecEnnemis, hit } from "/src/js/fonctions.js";
 
 var groupeBullets; 
 var groupe_ennemis; 
@@ -117,6 +117,9 @@ export default class niveau1 extends Phaser.Scene {
     
 
     this.physics.add.collider(this.player, groupe_ennemis, chocAvecEnnemis, null, this); 
+
+    this.physics.add.overlap(groupeBullets, groupe_ennemis, hit, null,this);
+  
 
   }
 

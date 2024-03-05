@@ -27,3 +27,8 @@ export function chocAvecEnnemis(un_player, un_groupe_ennemies) {
   this.player.setTint(0xff0000);
   this.gameOver = true;
 } 
+
+export function hit (bullet, ennemi) {
+  ennemi.destroy(); 
+  bullet.destroy();
+}  
