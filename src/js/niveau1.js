@@ -13,11 +13,11 @@ export default class niveau1 extends Phaser.Scene {
 
   preload() {
 
-    
+
     this.load.image("vaisseau_marche", "src/assets/vaisseau_marche.png"); 
     this.load.image("Tuiles_Terre", "src/assets/Tile_NiveauTerre.png");
     this.load.tilemapTiledJSON("carte_terre", "src/assets/carte_terre.json"); 
-
+    
   }
  
   create() {
@@ -87,7 +87,7 @@ export default class niveau1 extends Phaser.Scene {
           objet.destroy();
       }
     });
-
+  
     // extraction des poitns depuis le calque calque_ennemis, stockage dans tab_points
     const tab_points = carte_terre.getObjectLayer("calque_ennemi");   
 
@@ -117,25 +117,25 @@ export default class niveau1 extends Phaser.Scene {
     } else {
       this.player.setVelocityX(0);
     }
-
-    if (this.clavier.up.isDown) {
+  
+if (this.clavier.up.isDown) {
       this.player.setVelocityY(-500);
       if (this.player.texture.key === "vaisseau_marche") {
           this.player.setTexture("vaisseau_haut");
       } else if (this.player.texture.key === "vaisseau_recule") {
           this.player.setTexture("vaisseau_bas_gauche");
       }
-    } else if (this.clavier.down.isDown) {
-        this.player.setVelocityY(500);
-        if (this.player.texture.key === "vaisseau_marche") {
-            this.player.setTexture("vaisseau_bas");
-        } else if (this.player.texture.key === "vaisseau_recule") {
-            this.player.setTexture("vaisseau_haut_gauche");
-        }
-    } else {
-        // Réinitialisation de la vélocité verticale lorsque la touche du haut ou du bas n'est pas enfoncée
-        this.player.setVelocityY(0);
-        if (this.player.texture.key === "vaisseau_haut" || this.player.texture.key === "vaisseau_bas") {
+  } else if (this.clavier.down.isDown) {
+      this.player.setVelocityY(500);
+      if (this.player.texture.key === "vaisseau_marche") {
+          this.player.setTexture("vaisseau_bas");
+      } else if (this.player.texture.key === "vaisseau_recule") {
+          this.player.setTexture("vaisseau_haut_gauche");
+      }
+  } else {
+      // Réinitialisation de la vélocité verticale lorsque la touche du haut ou du bas n'est pas enfoncée
+      this.player.setVelocityY(0);
+if (this.player.texture.key === "vaisseau_haut" || this.player.texture.key === "vaisseau_bas") {
             this.player.setTexture("vaisseau_marche");
         } else if (this.player.texture.key === "vaisseau_haut_gauche" || this.player.texture.key === "vaisseau_bas_gauche") {
             this.player.setTexture("vaisseau_recule");
