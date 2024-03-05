@@ -83,9 +83,9 @@ export default class selection extends Phaser.Scene {
     this.player.setBounce(0.2);
 
     // redimensionnement du monde avec les dimensions calculées via tiled
-    this.physics.world.setBounds(0, 0, 1850, 610);
+    this.physics.world.setBounds(0, 0, 1850, 640);
     // ajout du champs de la caméra de taille identique à celle du monde
-    this.cameras.main.setBounds(0, 0, 1850, 610);
+    this.cameras.main.setBounds(0, 0, 1850, 640);
     // ancrage de la caméra sur le joueur
     this.cameras.main.startFollow(this.player);
 
