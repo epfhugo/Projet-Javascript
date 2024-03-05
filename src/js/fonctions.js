@@ -9,7 +9,7 @@ export function doAlsoNothing() {
     // cette fonction ne fait rien non plus.
 }
 
-export function tirer(player) {
+export function tirer(player, groupeBullets) {
     var coefDir;
   if (player.direction == 'left') { coefDir = -1; } else { coefDir = 1 }
     // on crée la balle a coté du joueur

@@ -1,6 +1,6 @@
+import {tirer} from "/src/js/fonctions.js";
+
 var groupeBullets;
-
-
 
 export default class niveau2 extends Phaser.Scene {
   // constructeur de la classe
@@ -110,7 +110,7 @@ export default class niveau2 extends Phaser.Scene {
   } 
 
   if ( Phaser.Input.Keyboard.JustDown(this.boutonFeu)) {
-    tirer(this.player);
+    tirer(this.player, groupeBullets);
   }
 }
 }
