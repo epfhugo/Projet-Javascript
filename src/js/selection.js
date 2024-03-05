@@ -40,6 +40,9 @@ export default class selection extends Phaser.Scene {
     this.load.image("vaisseau_bas", "src/assets/vaisseau_bas.png");
     this.load.image("vaisseau_bas_gauche", "src/assets/vaisseau_bas_gauche.png");
     this.load.image("vaisseau_haut_gauche", "src/assets/vaisseau_haut_gauche.png");
+    this.load.image("vaisseau_haut_gauche", "src/assets/vaisseau_haut_gauche.png");
+    this.load.image("vaisseau_arrêt", "src/assets/vaisseau_arrêt.png");
+
 
     // chargement tuiles de jeu
     this.load.image("Phaser_tuilesdejeu", "src/assets/Tile_NiveauLune.png");
@@ -136,6 +139,7 @@ export default class selection extends Phaser.Scene {
 
     } else {
       this.player.setVelocityX(0);
+      this.player.setTexture("vaisseau_arrêt");
     }
 
     if (clavier.up.isDown) {
@@ -161,7 +165,6 @@ export default class selection extends Phaser.Scene {
           this.player.setTexture("vaisseau_recule");
       }
   }
-
 
     if (Phaser.Input.Keyboard.JustDown(clavier.space)) {
       if (this.physics.overlap(this.player, this.chiffre1))
