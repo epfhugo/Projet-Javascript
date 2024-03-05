@@ -92,7 +92,7 @@ export default class niveau3 extends Phaser.Scene {
   // on fait une boucle foreach, qui parcours chaque élements du tableau tab_points  
   tab_points.objects.forEach(point => {
     if (point.name == "ennemi") {
-      var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_2");    
+      var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_3");    
       groupe_ennemis.add(nouvel_ennemi);
     }
   }); 
