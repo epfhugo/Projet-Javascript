@@ -1,5 +1,3 @@
-import {tirer} from "/src/js/fonctions.js";
-
 /***********************************************************************/
 /** VARIABLES GLOBALES 
 /***********************************************************************/
@@ -9,6 +7,8 @@ var clavier; // pour la gestion du clavier
 var boutonFeu;  
 // mise en place d'une variable groupeBullets
 var groupeBullets;  
+
+var gameOver = false; 
 
   
 

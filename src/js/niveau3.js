@@ -1,4 +1,4 @@
-import {tirer} from "/src/js/fonctions.js";
+import { tirer, chocAvecEnnemis } from "/src/js/fonctions.js";
 
 var groupeBullets;
 var groupe_ennemis; 
@@ -92,13 +92,22 @@ export default class niveau3 extends Phaser.Scene {
   // on fait une boucle foreach, qui parcours chaque élements du tableau tab_points  
   tab_points.objects.forEach(point => {
     if (point.name == "ennemi") {
-      var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_2");
-      nouvel_ennemi.setVelocityX(Phaser.Math.Between(-500, 500));
-      nouvel_ennemi.setVelocityY(Phaser.Math.Between(-500, 500));
-      nouvel_ennemi.setCollideWorldBounds(true); 
-      nouvel_ennemi.setBounce(1);
+      var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_2");    
+      groupe_ennemis.add(nouvel_ennemi);
     }
   }); 
+
+  groupe_ennemis.children.iterate(function iterateur(un_ennemi) {
+    un_ennemi.setCollideWorldBounds(true); 
+    un_ennemi.setBounce(1);
+    un_ennemi.setVelocityX(Phaser.Math.Between(-500, 500));
+    un_ennemi.setVelocityY(Phaser.Math.Between(-500, 500));
+
+  });
+
+  
+
+  this.physics.add.collider(this.player, groupe_ennemis, chocAvecEnnemis, null, this); 
 }
 
   update() {
@@ -137,6 +146,10 @@ export default class niveau3 extends Phaser.Scene {
     if ( Phaser.Input.Keyboard.JustDown(this.boutonFeu)) {
       tirer(this.player, groupeBullets);
     }
+
+    if (this.gameOver) {
+      return;
+    } 
     
   }
 

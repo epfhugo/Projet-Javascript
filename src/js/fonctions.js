@@ -21,3 +21,9 @@ export function tirer(player, groupeBullets) {
     bullet.body.allowGravity =false;
     bullet.setVelocity(2000 * coefDir, 0); // vitesse en x et en y
 }  
+
+export function chocAvecEnnemis(un_player, un_groupe_ennemies) {
+  this.physics.pause();
+  this.player.setTint(0xff0000);
+  this.gameOver = true;
+} 
