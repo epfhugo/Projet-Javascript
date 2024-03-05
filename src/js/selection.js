@@ -37,10 +37,7 @@ export default class selection extends Phaser.Scene {
     this.load.image("chiffre3", "src/assets/Chiffre3.png");
     this.load.image("vaisseau_marche", "src/assets/vaisseau_marche.png");
     this.load.image("vaisseau_recule", "src/assets/vaisseau_recule.png");
-    this.load.image("vaisseau_haut", "src/assets/vaisseau_haut.png");
-    this.load.image("vaisseau_bas", "src/assets/vaisseau_bas.png");
-    this.load.image("vaisseau_bas_gauche", "src/assets/vaisseau_bas_gauche.png");
-    this.load.image("vaisseau_haut_gauche", "src/assets/vaisseau_haut_gauche.png");
+    this.load.image("vaisseau_haut_2", "src/assets/vaisseau_haut_2.png");
     this.load.image("vaisseau_haut_gauche", "src/assets/vaisseau_haut_gauche.png");
     this.load.image("vaisseau_arrêt", "src/assets/vaisseau_arrêt.png");
 
@@ -140,31 +137,25 @@ export default class selection extends Phaser.Scene {
 
     } else {
       this.player.setVelocityX(0);
-      this.player.setTexture("vaisseau_arrêt");
     }
 
     if (clavier.up.isDown) {
       this.player.setVelocityY(-500);
       if (this.player.texture.key === "vaisseau_marche") {
-          this.player.setTexture("vaisseau_haut");
+          this.player.setTexture("vaisseau_haut_2");
       } else if (this.player.texture.key === "vaisseau_recule") {
-          this.player.setTexture("vaisseau_bas_gauche");
+          this.player.setTexture("vaisseau_haut_gauche");
       }
   } else if (clavier.down.isDown) {
       this.player.setVelocityY(500);
       if (this.player.texture.key === "vaisseau_marche") {
-          this.player.setTexture("vaisseau_bas");
+          this.player.setTexture("vaisseau_haut_2");
       } else if (this.player.texture.key === "vaisseau_recule") {
           this.player.setTexture("vaisseau_haut_gauche");
       }
   } else {
       // Réinitialisation de la vélocité verticale lorsque la touche du haut ou du bas n'est pas enfoncée
       this.player.setVelocityY(0);
-      if (this.player.texture.key === "vaisseau_haut" || this.player.texture.key === "vaisseau_bas") {
-          this.player.setTexture("vaisseau_marche");
-      } else if (this.player.texture.key === "vaisseau_haut_gauche" || this.player.texture.key === "vaisseau_bas_gauche") {
-          this.player.setTexture("vaisseau_recule");
-      }
   }
 
     if (Phaser.Input.Keyboard.JustDown(clavier.space)) {

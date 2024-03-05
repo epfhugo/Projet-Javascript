@@ -14,8 +14,12 @@ export default class niveau3 extends Phaser.Scene {
     this.load.image("Tuiles_Mars", "src/assets/Tile_NinveauMars.png");
     this.load.tilemapTiledJSON("carte_mars", "src/assets/carte_mars.json"); 
     this.load.image("vaisseau_marche", "src/assets/vaisseau_marche.png");
-  }
+    this.load.image("vaisseau_recule", "src/assets/vaisseau_recule.png");
+    this.load.image("vaisseau_haut_2", "src/assets/vaisseau_haut_2.png");
+    this.load.image("vaisseau_haut_gauche", "src/assets/vaisseau_haut_gauche.png");
+    this.load.image("vaisseau_arrêt", "src/assets/vaisseau_arrêt.png");
 
+  }
   create() {
 
     const carte_mars = this.add.tilemap("carte_mars");
@@ -78,30 +82,28 @@ export default class niveau3 extends Phaser.Scene {
 
   update() {
 
-    if (clavier.left.isDown) {
+    if (this.clavier.left.isDown) {
       this.player.setVelocityX(-450);
       this.player.setTexture("vaisseau_recule");
       this.player.direction = 'left'
 
-    } else if (clavier.right.isDown) {
+    } else if (this.clavier.right.isDown) {
       this.player.setVelocityX(450);
       this.player.setTexture("vaisseau_marche");
       this.player.direction = 'right'
 
     } else {
       this.player.setVelocityX(0);
-
     }
-  
 
-    if (clavier.up.isDown) {
+    if (this.clavier.up.isDown) {
       this.player.setVelocityY(-500);
       if (this.player.texture.key === "vaisseau_marche") {
           this.player.setTexture("vaisseau_haut_2");
       } else if (this.player.texture.key === "vaisseau_recule") {
           this.player.setTexture("vaisseau_haut_gauche");
       }
-  } else if (clavier.down.isDown) {
+  } else if (this.clavier.down.isDown) {
       this.player.setVelocityY(500);
       if (this.player.texture.key === "vaisseau_marche") {
           this.player.setTexture("vaisseau_haut_2");
@@ -111,7 +113,9 @@ export default class niveau3 extends Phaser.Scene {
   } else {
       // Réinitialisation de la vélocité verticale lorsque la touche du haut ou du bas n'est pas enfoncée
       this.player.setVelocityY(0);
-
+  }
+  if ( Phaser.Input.Keyboard.JustDown(this.boutonFeu)) {
+    tirer(this.player, groupeBullets);
   }
 }
 }

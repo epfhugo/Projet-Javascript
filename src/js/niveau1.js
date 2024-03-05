@@ -17,7 +17,10 @@ export default class niveau1 extends Phaser.Scene {
     this.load.image("vaisseau_marche", "src/assets/vaisseau_marche.png"); 
     this.load.image("Tuiles_Terre", "src/assets/Tile_NiveauTerre.png");
     this.load.tilemapTiledJSON("carte_terre", "src/assets/carte_terre.json"); 
-    
+    this.load.image("vaisseau_recule", "src/assets/vaisseau_recule.png");
+    this.load.image("vaisseau_haut_2", "src/assets/vaisseau_haut_2.png");
+    this.load.image("vaisseau_haut_gauche", "src/assets/vaisseau_haut_gauche.png");
+    this.load.image("vaisseau_arrêt", "src/assets/vaisseau_arrêt.png");
   }
  
   create() {
@@ -117,30 +120,25 @@ export default class niveau1 extends Phaser.Scene {
     } else {
       this.player.setVelocityX(0);
     }
-  
-if (this.clavier.up.isDown) {
+
+    if (this.clavier.up.isDown) {
       this.player.setVelocityY(-500);
       if (this.player.texture.key === "vaisseau_marche") {
-          this.player.setTexture("vaisseau_haut");
+          this.player.setTexture("vaisseau_haut_2");
       } else if (this.player.texture.key === "vaisseau_recule") {
-          this.player.setTexture("vaisseau_bas_gauche");
+          this.player.setTexture("vaisseau_haut_gauche");
       }
   } else if (this.clavier.down.isDown) {
       this.player.setVelocityY(500);
       if (this.player.texture.key === "vaisseau_marche") {
-          this.player.setTexture("vaisseau_bas");
+          this.player.setTexture("vaisseau_haut_2");
       } else if (this.player.texture.key === "vaisseau_recule") {
           this.player.setTexture("vaisseau_haut_gauche");
       }
   } else {
       // Réinitialisation de la vélocité verticale lorsque la touche du haut ou du bas n'est pas enfoncée
       this.player.setVelocityY(0);
-if (this.player.texture.key === "vaisseau_haut" || this.player.texture.key === "vaisseau_bas") {
-            this.player.setTexture("vaisseau_marche");
-        } else if (this.player.texture.key === "vaisseau_haut_gauche" || this.player.texture.key === "vaisseau_bas_gauche") {
-            this.player.setTexture("vaisseau_recule");
-        }
-    } 
+  }
 
     if ( Phaser.Input.Keyboard.JustDown(this.boutonFeu)) {
       tirer(this.player, groupeBullets);
