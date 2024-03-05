@@ -4,9 +4,25 @@ import * as fct from "/src/js/fonctions.js";
 /** VARIABLES GLOBALES 
 /***********************************************************************/
 
-var player; // désigne le sprite du joueur
-var clavier; // pour la gestion du clavier
 
+var clavier; // pour la gestion du clavier
+// mise en place d'une variable boutonFeu
+var boutonFeu;  
+// mise en place d'une variable groupeBullets
+var groupeBullets;  
+
+function tirer(player) {
+  var coefDir;
+if (player.direction == 'left') { coefDir = -1; } else { coefDir = 1 }
+  // on crée la balle a coté du joueur
+  var bullet = groupeBullets.create(player.x + (25 * coefDir), player.y - 4, 'bullet');
+  // parametres physiques de la balle.
+  bullet.setCollideWorldBounds(true);
+  // on acive la détection de l'evenement "collision au bornes"
+  bullet.body.onWorldBounds = true; 
+  bullet.body.allowGravity =false;
+  bullet.setVelocity(1000 * coefDir, 0); // vitesse en x et en y
+}   
 
 // définition de la classe "selection"
 export default class selection extends Phaser.Scene {
@@ -17,7 +33,7 @@ export default class selection extends Phaser.Scene {
 
   /***********************************************************************/
   /** FONCTION PRELOAD 
-/***********************************************************************/
+  /***********************************************************************/
 
   /** La fonction preload est appelée une et une seule fois,
    * lors du chargement de la scene dans le jeu.
@@ -25,7 +41,7 @@ export default class selection extends Phaser.Scene {
    */
   preload() {
     // tous les assets du jeu sont placés dans le sous-répertoire src/assets/
-
+    this.load.image("bullet", "src/assets/balle.png");
     this.load.image("chiffre1", "src/assets/Chiffre1.png");
     this.load.image("chiffre2", "src/assets/Chiffre2.png");
     this.load.image("chiffre3", "src/assets/Chiffre3.png");
@@ -68,15 +84,15 @@ export default class selection extends Phaser.Scene {
     /****************************
     *  Ajout des Chiffres  *
     ****************************/
-      this.chiffre1 = this.physics.add.staticSprite(350, 330, "chiffre1");
-      this.chiffre2 = this.physics.add.staticSprite(980, 330, "chiffre2");
-      this.chiffre3 = this.physics.add.staticSprite(1600, 330, "chiffre3");
+    this.chiffre1 = this.physics.add.staticSprite(350, 330, "chiffre1");
+    this.chiffre2 = this.physics.add.staticSprite(980, 330, "chiffre2");
+    this.chiffre3 = this.physics.add.staticSprite(1600, 330, "chiffre3");
 
-      this.chiffre1.setScale(0.7); 
-      this.chiffre2.setScale(0.7);
-      this.chiffre3.setScale(0.7);
+    this.chiffre1.setScale(0.7); 
+    this.chiffre2.setScale(0.7);
+    this.chiffre3.setScale(0.7);
 
-    this.player = this.physics.add.image(100, 450, "vaisseau_marche");
+    this.player = this.physics.add.image(100, 450, "vaisseau_marche"); 
 
     this.player.setCollideWorldBounds(true);
 
@@ -89,8 +105,27 @@ export default class selection extends Phaser.Scene {
     // ancrage de la caméra sur le joueur
     this.cameras.main.startFollow(this.player);
 
-    clavier = this.input.keyboard.createCursorKeys();
+    // creation d'un attribut direction pour le joueur, initialisée avec 'right'
+    this.player.direction = 'right'; 
 
+    // création d'un groupe d'éléments vide
+    groupeBullets = this.physics.add.group();
+
+    clavier = this.input.keyboard.createCursorKeys(); 
+
+    // affectation de la touche A à boutonFeu
+    boutonFeu = this.input.keyboard.addKey('A'); 
+
+    // instructions pour les objets surveillés en bord de monde
+    this.physics.world.on("worldbounds", function(body) {
+    // on récupère l'objet surveillé
+    var objet = body.gameObject;
+    // s'il s'agit d'une balle
+    if (groupeBullets.contains(objet)) {
+        // on le détruit
+        objet.destroy();
+    }
+   });
   }
 
   /***********************************************************************/
@@ -102,10 +137,12 @@ export default class selection extends Phaser.Scene {
     if (clavier.left.isDown) {
       this.player.setVelocityX(-300);
       this.player.setTexture("vaisseau_recule");
+      this.player.direction = 'left'
 
     } else if (clavier.right.isDown) {
       this.player.setVelocityX(300);
       this.player.setTexture("vaisseau_marche");
+      this.player.direction = 'right'
 
     } else {
       this.player.setVelocityX(0);
@@ -144,5 +181,9 @@ export default class selection extends Phaser.Scene {
       if (this.physics.overlap(this.player, this.chiffre3))
         this.scene.switch("niveau3");
     }
+
+    if ( Phaser.Input.Keyboard.JustDown(boutonFeu)) {
+      tirer(this.player);
+    }  
   }
 }
