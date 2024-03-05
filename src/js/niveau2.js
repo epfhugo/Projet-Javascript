@@ -12,14 +12,14 @@ export default class niveau2 extends Phaser.Scene {
     
     this.load.image("vaisseau_marche", "src/assets/vaisseau_marche.png"); 
     this.load.image("monstre_2", "src/assets/monstre_2.png");
-    this.load.image("Phaser_tuiledejeu", "src/assets/Tile_NiveauMoon.png");
+    this.load.image("Tuiles_Moon", "src/assets/Tile_NiveauMoon.png");
     this.load.tilemapTiledJSON("carte_lune", "src/assets/carte_lune.json"); 
 
   }
 
   create() {
     const carte_lune = this.add.tilemap("carte_lune");
-    const tileset = carte_lune.addTilesetImage("Tile_NiveauMoon", "Phaser_tuilesdejeu");
+    const tileset = carte_lune.addTilesetImage("Tile_NiveauMoon",'Tuiles_Moon');
 
     
     const Fond = carte_lune.createLayer(
