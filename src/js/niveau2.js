@@ -92,25 +92,25 @@ export default class niveau2 extends Phaser.Scene {
       } else if (this.player.texture.key === "vaisseau_recule") {
           this.player.setTexture("vaisseau_bas_gauche");
       }
-  } else if (this.clavier.down.isDown) {
-      this.player.setVelocityY(300);
-      if (this.player.texture.key === "vaisseau_marche") {
-          this.player.setTexture("vaisseau_bas");
-      } else if (this.player.texture.key === "vaisseau_recule") {
-          this.player.setTexture("vaisseau_haut_gauche");
-      }
-  } else {
-      // Réinitialisation de la vélocité verticale lorsque la touche du haut ou du bas n'est pas enfoncée
-      this.player.setVelocityY(0);
-      if (this.player.texture.key === "vaisseau_haut" || this.player.texture.key === "vaisseau_bas") {
-          this.player.setTexture("vaisseau_marche");
-      } else if (this.player.texture.key === "vaisseau_haut_gauche" || this.player.texture.key === "vaisseau_bas_gauche") {
-          this.player.setTexture("vaisseau_recule");
-      }
-  } 
+    } else if (this.clavier.down.isDown) {
+        this.player.setVelocityY(300);
+        if (this.player.texture.key === "vaisseau_marche") {
+            this.player.setTexture("vaisseau_bas");
+        } else if (this.player.texture.key === "vaisseau_recule") {
+            this.player.setTexture("vaisseau_haut_gauche");
+        }
+    } else {
+        // Réinitialisation de la vélocité verticale lorsque la touche du haut ou du bas n'est pas enfoncée
+        this.player.setVelocityY(0);
+        if (this.player.texture.key === "vaisseau_haut" || this.player.texture.key === "vaisseau_bas") {
+            this.player.setTexture("vaisseau_marche");
+        } else if (this.player.texture.key === "vaisseau_haut_gauche" || this.player.texture.key === "vaisseau_bas_gauche") {
+            this.player.setTexture("vaisseau_recule");
+        }
+    } 
 
-  if ( Phaser.Input.Keyboard.JustDown(this.boutonFeu)) {
-    tirer(this.player, groupeBullets);
+    if ( Phaser.Input.Keyboard.JustDown(this.boutonFeu)) {
+      tirer(this.player, groupeBullets);
+    }
   }
-}
 }

@@ -1,17 +1,6 @@
-var groupeBullets;
+import {tirer} from "/src/js/fonctions.js";
 
-function tirer(player) {
-  var coefDir;
-if (player.direction == 'left') { coefDir = -1; } else { coefDir = 1 }
-  // on crée la balle a coté du joueur
-  var bullet = groupeBullets.create(player.x + (25 * coefDir), player.y - 4, 'bullet');
-  // parametres physiques de la balle.
-  bullet.setCollideWorldBounds(true);
-  // on acive la détection de l'evenement "collision au bornes"
-  bullet.body.onWorldBounds = true;   
-  bullet.body.allowGravity =false;
-  bullet.setVelocity(1000 * coefDir, 0); // vitesse en x et en y
-}   
+var groupeBullets;
 
 export default class niveau3 extends Phaser.Scene {
   // constructeur de la classe
@@ -110,25 +99,25 @@ export default class niveau3 extends Phaser.Scene {
       } else if (this.player.texture.key === "vaisseau_recule") {
           this.player.setTexture("vaisseau_bas_gauche");
       }
-  } else if (this.clavier.down.isDown) {
-      this.player.setVelocityY(300);
-      if (this.player.texture.key === "vaisseau_marche") {
-          this.player.setTexture("vaisseau_bas");
-      } else if (this.player.texture.key === "vaisseau_recule") {
-          this.player.setTexture("vaisseau_haut_gauche");
-      }
-  } else {
-      // Réinitialisation de la vélocité verticale lorsque la touche du haut ou du bas n'est pas enfoncée
-      this.player.setVelocityY(0);
-      if (this.player.texture.key === "vaisseau_haut" || this.player.texture.key === "vaisseau_bas") {
-          this.player.setTexture("vaisseau_marche");
-      } else if (this.player.texture.key === "vaisseau_haut_gauche" || this.player.texture.key === "vaisseau_bas_gauche") {
-          this.player.setTexture("vaisseau_recule");
-      }
-  } 
+    } else if (this.clavier.down.isDown) {
+        this.player.setVelocityY(300);
+        if (this.player.texture.key === "vaisseau_marche") {
+            this.player.setTexture("vaisseau_bas");
+        } else if (this.player.texture.key === "vaisseau_recule") {
+            this.player.setTexture("vaisseau_haut_gauche");
+        }
+    } else {
+        // Réinitialisation de la vélocité verticale lorsque la touche du haut ou du bas n'est pas enfoncée
+        this.player.setVelocityY(0);
+        if (this.player.texture.key === "vaisseau_haut" || this.player.texture.key === "vaisseau_bas") {
+            this.player.setTexture("vaisseau_marche");
+        } else if (this.player.texture.key === "vaisseau_haut_gauche" || this.player.texture.key === "vaisseau_bas_gauche") {
+            this.player.setTexture("vaisseau_recule");
+        }
+    } 
 
-  if ( Phaser.Input.Keyboard.JustDown(this.boutonFeu)) {
-    tirer(this.player);
+    if ( Phaser.Input.Keyboard.JustDown(this.boutonFeu)) {
+      tirer(this.player, groupeBullets);
+    }
   }
-}
 }
