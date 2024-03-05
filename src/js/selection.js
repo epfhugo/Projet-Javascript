@@ -29,6 +29,7 @@ export default class selection extends Phaser.Scene {
    */
   preload() {
     // tous les assets du jeu sont placés dans le sous-répertoire src/assets/
+    this.load.image("monstre_2", "src/assets/monstre_2.png");
     this.load.image("help", "src/assets/help.png");
     this.load.image("bullet", "src/assets/balle.png");
     this.load.image("chiffre1", "src/assets/Chiffre1.png");

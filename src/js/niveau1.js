@@ -47,9 +47,14 @@ export default class niveau1 extends Phaser.Scene {
       );
 
       const Ville = carte_terre.createLayer(
-        " Ville",
+        "Ville",
         tileset
       );
+
+      const calque_ennemi = carte_terre.createLayer(
+        "ennemi",
+        tileset
+      )
 
       this.player = this.physics.add.image(100, 450,"vaisseau_marche");
       this.player.setCollideWorldBounds(true); 
@@ -82,8 +87,20 @@ export default class niveau1 extends Phaser.Scene {
           objet.destroy();
       }
     });
-  }
 
+    // extraction des poitns depuis le calque calque_ennemis, stockage dans tab_points
+    const tab_points = carte_terre.getObjectLayer("calque_ennemi");   
+
+    // on fait une boucle foreach, qui parcours chaque élements du tableau tab_points  
+    tab_points.objects.forEach(point => {
+        if (point.name == "ennemi") {
+          var nouvel_ennemi = this.physics.add.image("monstre_2");
+          nouvel_ennemi.setCollideWorldBounds(true); 
+          nouvel_ennemi.setBounce(0.2);
+          nouvel_ennemi.setVelocityX(500);
+        }
+    }); 
+  }
 
   update() {
  
