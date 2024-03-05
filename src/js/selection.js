@@ -1,4 +1,4 @@
-import * as fct from "/src/js/fonctions.js";
+import {tirer} from "/src/js/fonctions.js";
 
 /***********************************************************************/
 /** VARIABLES GLOBALES 
@@ -171,7 +171,7 @@ export default class selection extends Phaser.Scene {
     }
 
     if ( Phaser.Input.Keyboard.JustDown(boutonFeu)) {
-      tirer(this.player);
+      tirer(this.player, groupeBullets);
     }  
   }
 }
