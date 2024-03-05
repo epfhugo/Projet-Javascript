@@ -72,12 +72,12 @@ export default class niveau2 extends Phaser.Scene {
   update() {
 
     if (this.clavier.left.isDown) {
-      this.player.setVelocityX(-300);
+      this.player.setVelocityX(-450);
       this.player.setTexture("vaisseau_recule");
       this.player.direction = 'left'
 
     } else if (this.clavier.right.isDown) {
-      this.player.setVelocityX(300);
+      this.player.setVelocityX(450);
       this.player.setTexture("vaisseau_marche");
       this.player.direction = 'right'
 
@@ -86,14 +86,14 @@ export default class niveau2 extends Phaser.Scene {
     }
 
     if (this.clavier.up.isDown) {
-      this.player.setVelocityY(-300);
+      this.player.setVelocityY(-500);
       if (this.player.texture.key === "vaisseau_marche") {
           this.player.setTexture("vaisseau_haut");
       } else if (this.player.texture.key === "vaisseau_recule") {
           this.player.setTexture("vaisseau_bas_gauche");
       }
     } else if (this.clavier.down.isDown) {
-        this.player.setVelocityY(300);
+        this.player.setVelocityY(500);
         if (this.player.texture.key === "vaisseau_marche") {
             this.player.setTexture("vaisseau_bas");
         } else if (this.player.texture.key === "vaisseau_recule") {
