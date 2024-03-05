@@ -29,6 +29,9 @@ export function chocAvecEnnemis(un_player, un_groupe_ennemies) {
 } 
 
 export function hit (bullet, ennemi) {
-  ennemi.destroy(); 
+  ennemi.pointsVie--;
+  if (ennemi.pointsVie==0) {
+    ennemi.destroy(); 
+  } 
   bullet.destroy();
 }  

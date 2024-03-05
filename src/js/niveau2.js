@@ -97,7 +97,7 @@ export default class niveau2 extends Phaser.Scene {
     un_ennemi.setBounce(1);
     un_ennemi.setVelocityX(Phaser.Math.Between(-500, 500));
     un_ennemi.setVelocityY(Phaser.Math.Between(-500, 500));
-
+    un_ennemi.pointsVie = 2;
   }); 
 
   
