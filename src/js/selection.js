@@ -12,6 +12,7 @@ var clavier; // pour la gestion du clavier
 export default class selection extends Phaser.Scene {
   constructor() {
     super({ key: "selection" }); // mettre le meme nom que le nom de la classe
+
   }
 
   /***********************************************************************/
@@ -24,10 +25,16 @@ export default class selection extends Phaser.Scene {
    */
   preload() {
     // tous les assets du jeu sont placés dans le sous-répertoire src/assets/
-    this.load.image("player", "src/assets/vaisseau_marche.png");
+
     this.load.image("chiffre1", "src/assets/Chiffre1.png");
     this.load.image("chiffre2", "src/assets/Chiffre2.png");
     this.load.image("chiffre3", "src/assets/Chiffre3.png");
+    this.load.image("vaisseau_marche", "src/assets/vaisseau_marche.png");
+    this.load.image("vaisseau_recule", "src/assets/vaisseau_recule.png");
+    this.load.image("vaisseau_haut", "src/assets/vaisseau_haut.png");
+    this.load.image("vaisseau_bas", "src/assets/vaisseau_bas.png");
+    this.load.image("vaisseau_bas_gauche", "src/assets/vaisseau_bas_gauche.png");
+    this.load.image("vaisseau_haut_gauche", "src/assets/vaisseau_haut_gauche.png");
 
     // chargement tuiles de jeu
     this.load.image("Phaser_tuilesdejeu", "src/assets/Tile_NiveauLune.png");
@@ -58,27 +65,32 @@ export default class selection extends Phaser.Scene {
     // chargement du calque calque_background_2
     const calque_background_2 = carteDuNiveau.createLayer("Planète", tileset);
 
-    this.player = this.physics.add.image(100, 450, "player");
+    /****************************
+    *  Ajout des Chiffres  *
+    ****************************/
+      this.chiffre1 = this.physics.add.staticSprite(350, 330, "chiffre1");
+      this.chiffre2 = this.physics.add.staticSprite(980, 330, "chiffre2");
+      this.chiffre3 = this.physics.add.staticSprite(1600, 330, "chiffre3");
+
+      this.chiffre1.setScale(0.7); 
+      this.chiffre2.setScale(0.7);
+      this.chiffre3.setScale(0.7);
+
+    this.player = this.physics.add.image(100, 450, "vaisseau_marche");
 
     this.player.setCollideWorldBounds(true);
 
     this.player.setBounce(0.2);
 
     // redimensionnement du monde avec les dimensions calculées via tiled
-    this.physics.world.setBounds(0, 0, 3200, 640);
+    this.physics.world.setBounds(0, 0, 1850, 610);
     // ajout du champs de la caméra de taille identique à celle du monde
-    this.cameras.main.setBounds(0, 0, 3200, 640);
+    this.cameras.main.setBounds(0, 0, 1850, 610);
     // ancrage de la caméra sur le joueur
     this.cameras.main.startFollow(this.player);
 
     clavier = this.input.keyboard.createCursorKeys();
 
-    /****************************
-     *  Ajout des portes   *
-     ****************************/
-    this.chiffre1 = this.physics.add.staticSprite(650, 300, "chiffre1");
-    this.chiffre2 = this.physics.add.staticSprite(1650, 300, "chiffre2");
-    this.chiffre3 = this.physics.add.staticSprite(2650, 300, "chiffre3");
   }
 
   /***********************************************************************/
@@ -86,20 +98,40 @@ export default class selection extends Phaser.Scene {
 /***********************************************************************/
 
   update() {
+ 
     if (clavier.left.isDown) {
-      this.player.setVelocityX(-160);
-      this.player.anims.play("anim_tourne_gauche", true);
+      this.player.setVelocityX(-300);
+      this.player.setTexture("vaisseau_recule");
+
     } else if (clavier.right.isDown) {
-      this.player.setVelocityX(160);
+      this.player.setVelocityX(300);
+      this.player.setTexture("vaisseau_marche");
+
     } else {
       this.player.setVelocityX(0);
     }
 
-    if (clavier.up.isDown && this.player.body.touching.down) {
-      this.player.setVelocityY(-330);
-    } else if (clavier.down.isDown && this.player.body.touching.down) {
-      this.player.setVelocityY(330);
-    }
+    if (clavier.up.isDown && clavier.left.isDown) {
+      this.player.setVelocityY(-300);
+      this.player.setTexture("vaisseau_bas_gauche");
+      
+    } else if (clavier.up.isDown && clavier.right.isDown) {
+      this.player.setVelocityY(-300);
+      this.player.setTexture("vaisseau_haut");
+
+    } else if (clavier.down.isDown && clavier.left.isDown) {
+      this.player.setVelocityY(300);
+      this.player.setTexture("vaisseau_haut_gauche");
+
+    } else if (clavier.down.isDown && clavier.right.isDown) {
+      this.player.setVelocityY(300);
+      this.player.setTexture("vaisseau_bas");
+
+    } else {
+      // Réinitialisation de la vélocité verticale lorsque la touche du haut ou du bas n'est pas enfoncée
+      this.player.setVelocityY(0);
+  }
+
 
     if (Phaser.Input.Keyboard.JustDown(clavier.space)) {
       if (this.physics.overlap(this.player, this.chiffre1))
