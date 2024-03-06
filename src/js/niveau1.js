@@ -1,7 +1,7 @@
 import { tirer, chocAvecEnnemis, hit } from "/src/js/fonctions.js";
 
 var groupeBullets; 
-var groupe_ennemis; 
+var groupe_ennemis;  
 
 export default class niveau1 extends Phaser.Scene {
 
@@ -73,7 +73,9 @@ export default class niveau1 extends Phaser.Scene {
 
   
       // creation d'un attribut direction pour le joueur, initialisée avec 'right'
-      this.player.direction = 'right'; 
+      this.player.direction = 'right';
+      
+      this.player.peutTirer = true; 
   
       groupeBullets = this.physics.add.group();
   
@@ -104,7 +106,7 @@ export default class niveau1 extends Phaser.Scene {
           var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_2");    
           groupe_ennemis.add(nouvel_ennemi);
         }
-    }); 
+     }); 
 
     groupe_ennemis.children.iterate(function iterateur(un_ennemi) {
       un_ennemi.setCollideWorldBounds(true); 
@@ -114,12 +116,33 @@ export default class niveau1 extends Phaser.Scene {
       un_ennemi.pointsVie = 1;
     }); 
 
-    
-
     this.physics.add.collider(this.player, groupe_ennemis, chocAvecEnnemis, null, this); 
 
     this.physics.add.overlap(groupeBullets, groupe_ennemis, hit, null,this);
   
+
+    var monTimer = this.time.addEvent({
+      delay: 5000, // ms
+      callback: function () {
+        tab_points.objects.forEach(point => {
+          if (point.name == "ennemi") {
+            var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_2");    
+            groupe_ennemis.add(nouvel_ennemi);
+          }
+        }); 
+    
+        groupe_ennemis.children.iterate(function iterateur(un_ennemi) {
+          un_ennemi.setCollideWorldBounds(true); 
+          un_ennemi.setBounce(1);
+          un_ennemi.setVelocityX(Phaser.Math.Between(-500, 500));
+          un_ennemi.setVelocityY(Phaser.Math.Between(-500, 500));
+          un_ennemi.pointsVie = 1;
+        });;
+      },
+      args: [],
+      callbackScope: this,
+      repeat: -1
+    }); 
 
   }
 
@@ -157,11 +180,25 @@ export default class niveau1 extends Phaser.Scene {
     }
 
     if ( Phaser.Input.Keyboard.JustDown(this.boutonFeu)) {
-      tirer(this.player, groupeBullets);
+      if (this.player.peutTirer == true) {
+        tirer(this.player, groupeBullets);
+        this.player.peutTirer = false; // on désactive la possibilté de tirer
+        // on la réactive dans 2 secondes avec un timer
+        var timerTirOk = this.time.delayedCall(1000,
+           function () {
+            this.player.peutTirer = true;
+        },
+        null, this);  
+      } 
     }
 
     if (this.gameOver) {
-      return;
+      this.gameOver = false;
+      var timerRestart = this.time.delayedCall(3000,
+        function () {
+          this.scene.restart();
+        },
+        null, this);   
     } 
 
   }

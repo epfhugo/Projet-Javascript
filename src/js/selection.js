@@ -1,4 +1,4 @@
-import { tirer, chocAvecEnnemis } from "/src/js/fonctions.js";
+import { tirer } from "/src/js/fonctions.js";
 
 /***********************************************************************/
 /** VARIABLES GLOBALES 
@@ -10,7 +10,8 @@ var boutonFeu;
 // mise en place d'une variable groupeBullets
 var groupeBullets;  
 
-var gameOver = false; 
+var gameOver;
+
 
   
 
@@ -107,6 +108,8 @@ export default class selection extends Phaser.Scene {
     // creation d'un attribut direction pour le joueur, initialisée avec 'right'
     this.player.direction = 'right'; 
 
+    this.player.peutTirer = true; 
+
     // création d'un groupe d'éléments vide
     groupeBullets = this.physics.add.group();
 
@@ -117,14 +120,14 @@ export default class selection extends Phaser.Scene {
 
     // instructions pour les objets surveillés en bord de monde
     this.physics.world.on("worldbounds", function(body) {
-    // on récupère l'objet surveillé
-    var objet = body.gameObject;
-    // s'il s'agit d'une balle
-    if (groupeBullets.contains(objet)) {
-        // on le détruit
-        objet.destroy();
-    }
-   });
+      // on récupère l'objet surveillé
+      var objet = body.gameObject;
+      // s'il s'agit d'une balle
+      if (groupeBullets.contains(objet)) {
+          // on le détruit
+          objet.destroy();
+      }
+    });
   }
 
   /***********************************************************************/
@@ -176,7 +179,16 @@ export default class selection extends Phaser.Scene {
     }
 
     if ( Phaser.Input.Keyboard.JustDown(boutonFeu)) {
-      tirer(this.player, groupeBullets);
+      if (this.player.peutTirer == true) {
+        tirer(this.player, groupeBullets);
+        this.player.peutTirer = false; // on désactive la possibilté de tirer
+        // on la réactive dans 2 secondes avec un timer
+        var timerTirOk = this.time.delayedCall(1000,
+           function () {
+            this.player.peutTirer = true;
+        },
+        null, this);  
+      }
     }  
   }
 }
