@@ -107,10 +107,9 @@ export default class niveau3 extends Phaser.Scene {
     un_ennemi.pointsVie = 3;
   });
 
-  this.physics.add.collider(this.player, groupe_ennemis, chocAvecEnnemis, null, this); 
+  this.physics.add.overlap(this.player, groupe_ennemis, chocAvecEnnemis, null, this);
 
   this.physics.add.overlap(groupeBullets, groupe_ennemis, hit, null,this);
-
 
   var monTimer = this.time.addEvent({
     delay: 20000, // ms
@@ -141,6 +140,12 @@ export default class niveau3 extends Phaser.Scene {
         un_ennemi.pointsVie = 3;
       });;
       console.log(groupe_ennemis.getLength());
+      this.collisionActive = false;
+        var timerImmunite = this.time.delayedCall(10000,
+          function () {
+          this.collisionActive = true;
+          },
+          null, this); 
     },
     args: [],
     callbackScope: this,

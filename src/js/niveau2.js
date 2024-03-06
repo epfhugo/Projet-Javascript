@@ -102,7 +102,7 @@ export default class niveau2 extends Phaser.Scene {
     un_ennemi.pointsVie = 2;
   }); 
 
-  this.physics.add.collider(this.player, groupe_ennemis, chocAvecEnnemis, null, this); 
+  this.physics.add.overlap(this.player, groupe_ennemis, chocAvecEnnemis, null, this);
 
   this.physics.add.overlap(groupeBullets, groupe_ennemis, hit, null,this);
 
@@ -136,6 +136,12 @@ export default class niveau2 extends Phaser.Scene {
         un_ennemi.pointsVie = 2;
       });;
       console.log(groupe_ennemis.getLength());
+      this.collisionActive = false;
+        var timerImmunite = this.time.delayedCall(10000,
+          function () {
+          this.collisionActive = true;
+          },
+          null, this); 
     },
     args: [],
     callbackScope: this,
