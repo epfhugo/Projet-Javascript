@@ -48,4 +48,5 @@ export function sauvegarderNouveauRecordEtAfficherInfos(planet, score) {
     console.log(`Score pour ${planet} : ${score}`);
     console.log(`Record pour ${planet} : ${meilleurScore}`);
   }
+  
 }
