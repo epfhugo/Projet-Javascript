@@ -2,9 +2,11 @@ import { tirer, chocAvecEnnemis, hit, sauvegarderNouveauRecordEtAfficherInfos } 
 
 var groupeBullets; 
 var groupe_ennemis; 
-var level = 0; 
-var levelText;
 var collision;
+var vague = 0; 
+var vagueText;
+var score = 0;
+var scoreText;
 
 export default class niveau1 extends Phaser.Scene {
 
@@ -61,11 +63,17 @@ export default class niveau1 extends Phaser.Scene {
         tileset
       )
 
-      levelText = this.add.text(0, 0, "Level : " + level, {
+      vagueText = this.add.text(0, 0, "vague : " + vague, {
         fontSize: "24px",
         fill: "#FFFFFF" //Couleur de l'écriture
       });
-      levelText.setScrollFactor(0); 
+      vagueText.setScrollFactor(0); 
+
+      scoreText = this.add.text(0, 30, "score : " + score, {
+        fontSize: "24px",
+        fill: "#FFFFFF" //Couleur de l'écriture
+      });
+      scoreText.setScrollFactor(0); 
 
       this.player = this.physics.add.image(100, 450,"vaisseau_marche");
       this.player.setCollideWorldBounds(true); 
@@ -82,7 +90,7 @@ export default class niveau1 extends Phaser.Scene {
       this.cameras.main.startFollow(this.player);
       this.player.setSize(128,64);
 
-  
+ 
       // creation d'un attribut direction pour le joueur, initialisée avec 'right'
       this.player.direction = 'right';
       
@@ -138,8 +146,10 @@ export default class niveau1 extends Phaser.Scene {
       delay: 30000, // ms
       callback: function () {
         collision.destroy();
-        level++;
-        levelText.setText("Level : " + level);
+        vague++;
+        vagueText.setText("Level : " + vague);
+        score++;
+        scoreText.setText("Level : " + score);
         console.log(level);
         tab_points.objects.forEach((point, index) => {
           if (point.name === "ennemi") {

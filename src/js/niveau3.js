@@ -2,8 +2,8 @@ import { tirer, chocAvecEnnemis, hit } from "/src/js/fonctions.js";
 
 var groupeBullets;
 var groupe_ennemis; 
-var level = 0; 
-var levelText;
+var vague = 0; 
+var vagueText;
 var collision;
 
 export default class niveau3 extends Phaser.Scene {
@@ -56,11 +56,11 @@ export default class niveau3 extends Phaser.Scene {
       tileset
     )
 
-    levelText = this.add.text(0, 0, "Level : " + level, {
+    vagueText = this.add.text(0, 0, "Level : " + vague, {
       fontSize: "24px",
       fill: "#FFFFFF" //Couleur de l'écriture
     });
-    levelText.setScrollFactor(0); 
+    vagueText.setScrollFactor(0); 
     
     this.player = this.physics.add.image(100, 450,"vaisseau_marche");
     this.player.setCollideWorldBounds(true); 
@@ -132,8 +132,8 @@ export default class niveau3 extends Phaser.Scene {
     delay: 60000, // ms
     callback: function () {
       collision.destroy();
-      level++;
-      levelText.setText("Level : " + level);
+      vague++;
+      vagueText.setText("Level : " + vague);
       console.log(level);
       tab_points.objects.forEach((point, index) => {
         if (point.name === "ennemi") {
