@@ -71,6 +71,9 @@ export default class niveau1 extends Phaser.Scene {
       this.player.setCollideWorldBounds(true); 
       this.player.setBounce(0.2);
 
+      this.player.vitesseMax = 800; // Vitesse maximale du vaisseau
+      this.player.acceleration = 7; // Accélération du vaisseau
+
       // redimensionnement du monde avec les dimensions calculées via tiled
       this.physics.world.setBounds(0, 0, 6400, 610);
       // ajout du champs de la caméra de taille identique à celle du monde
@@ -176,36 +179,73 @@ export default class niveau1 extends Phaser.Scene {
 
   update() {
 
-    if (this.clavier.left.isDown) {
-      this.player.setVelocityX(-450);
-      this.player.setTexture("vaisseau_recule");
-      this.player.direction = 'left'
-    } else if (this.clavier.right.isDown) {
-      this.player.setVelocityX(450);
-      this.player.setTexture("vaisseau_marche");
-      this.player.direction = 'right'
-    } else {
-      this.player.setVelocityX(0);
+// Gestion des mouvements horizontaux
+if (this.clavier.left.isDown) {
+  // Accélération progressive vers la gauche
+  this.player.setVelocityX(Math.max(this.player.body.velocity.x - this.player.acceleration, -this.player.vitesseMax));
+  this.player.setTexture("vaisseau_recule");
+  this.player.direction = 'left';
+} else if (this.clavier.right.isDown) {
+  // Accélération progressive vers la droite
+  this.player.setVelocityX(Math.min(this.player.body.velocity.x + this.player.acceleration, this.player.vitesseMax));
+  this.player.setTexture("vaisseau_marche");
+  this.player.direction = 'right';
+} else {
+  // Freinage progressif en cas de relâchement des touches horizontales
+  if (this.player.body.velocity.x > 0) {
+    this.player.setVelocityX(Math.max(this.player.body.velocity.x - 2 * this.player.acceleration, 0));
+    this.player.setTexture("vaisseau_marche");
+  } else if (this.player.body.velocity.x < 0) {
+    this.player.setVelocityX(Math.min(this.player.body.velocity.x + 2 * this.player.acceleration, 0));
+    this.player.setTexture("vaisseau_recule");
+  } else {
+    // Ajout de la condition pour la texture lorsque le vaisseau est immobile horizontalement
+    if (this.player.direction === 'left') {
+      this.player.setTexture("vaisseau_arrêt_recule");
+    } else if (this.player.direction === 'right') {
+      this.player.setTexture("vaisseau_arrêt");
     }
+  }
+}
 
-    if (this.clavier.up.isDown) {
-      this.player.setVelocityY(-500);
-      if (this.player.texture.key === "vaisseau_marche") {
-          this.player.setTexture("vaisseau_haut_2");
-      } else if (this.player.texture.key === "vaisseau_recule") {
-          this.player.setTexture("vaisseau_haut_gauche");
-      }
-    } else if (this.clavier.down.isDown) {
-        this.player.setVelocityY(500);
-        if (this.player.texture.key === "vaisseau_marche") {
-            this.player.setTexture("vaisseau_haut_2");
-        } else if (this.player.texture.key === "vaisseau_recule") {
-            this.player.setTexture("vaisseau_haut_gauche");
-        }
+// Gestion des mouvements verticaux
+if (this.clavier.up.isDown) {
+  // Accélération progressive vers le haut
+  this.player.setVelocityY(Math.max(this.player.body.velocity.y - this.player.acceleration, -this.player.vitesseMax));
+
+  // Ajout de la condition pour la texture lorsque le vaisseau monte
+  if (this.player.direction === 'left') {
+    this.player.setTexture("vaisseau_haut_gauche");
+  } else {
+    this.player.setTexture("vaisseau_haut_2");
+  }
+} else if (this.clavier.down.isDown) {
+  // Accélération progressive vers le bas
+  this.player.setVelocityY(Math.min(this.player.body.velocity.y + this.player.acceleration, this.player.vitesseMax));
+
+  // Ajout de la condition pour la texture lorsque le vaisseau descend
+  if (this.player.direction === 'left') {
+    this.player.setTexture("vaisseau_haut_gauche");
+  } else {
+    this.player.setTexture("vaisseau_haut_2");
+  }
+} else {
+  // Freinage progressif en cas de relâchement des touches verticales
+  if (this.player.body.velocity.y > 0) {
+    this.player.setVelocityY(Math.max(this.player.body.velocity.y - 4 * this.player.acceleration, 0));
+  } else if (this.player.body.velocity.y < 0) {
+    this.player.setVelocityY(Math.min(this.player.body.velocity.y + 4 * this.player.acceleration, 0));
+  }
+
+  // Réinitialisation de la texture lorsque le vaisseau est immobile verticalement
+  if (this.clavier.left.isUp && this.clavier.right.isUp && this.clavier.up.isUp && this.clavier.down.isUp) {
+    if (this.player.direction === 'left') {
+      this.player.setTexture("vaisseau_arrêt_recule");
     } else {
-        // Réinitialisation de la vélocité verticale lorsque la touche du haut ou du bas n'est pas enfoncée
-        this.player.setVelocityY(0);
+      this.player.setTexture("vaisseau_arrêt");
     }
+  }
+}
 
     if ( Phaser.Input.Keyboard.JustDown(this.boutonFeu)) {
       if (this.player.peutTirer == true) {
