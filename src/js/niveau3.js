@@ -2,6 +2,8 @@ import { tirer, chocAvecEnnemis, hit } from "/src/js/fonctions.js";
 
 var groupeBullets;
 var groupe_ennemis; 
+var level = 0; 
+var collision;
 
 export default class niveau3 extends Phaser.Scene {
   // constructeur de la classe
@@ -107,13 +109,18 @@ export default class niveau3 extends Phaser.Scene {
     un_ennemi.pointsVie = 3;
   });
 
-  this.physics.add.overlap(this.player, groupe_ennemis, chocAvecEnnemis, null, this);
+  var timerImmunite = this.time.delayedCall(10000,
+    function () {
+       collision = this.physics.add.collider(this.player, groupe_ennemis, chocAvecEnnemis, null, this);
+    },
+    null, this);
 
   this.physics.add.overlap(groupeBullets, groupe_ennemis, hit, null,this);
 
   var monTimer = this.time.addEvent({
     delay: 20000, // ms
     callback: function () {
+      collision.destroy();
       level++;
       console.log(level);
       tab_points.objects.forEach((point, index) => {
@@ -140,12 +147,11 @@ export default class niveau3 extends Phaser.Scene {
         un_ennemi.pointsVie = 3;
       });;
       console.log(groupe_ennemis.getLength());
-      this.collisionActive = false;
-        var timerImmunite = this.time.delayedCall(10000,
-          function () {
-          this.collisionActive = true;
-          },
-          null, this); 
+      var timerImmunite = this.time.delayedCall(10000,
+        function () {
+           collision = this.physics.add.collider(this.player, groupe_ennemis, chocAvecEnnemis, null, this);
+        },
+        null, this);
     },
     args: [],
     callbackScope: this,
@@ -202,8 +208,10 @@ export default class niveau3 extends Phaser.Scene {
 
     if (this.gameOver) {
       this.gameOver = false;
-      var timerRestart = this.time.delayedCall(3000,
+      var timerRestart = this.time.delayedCall(1000,
         function () {
+          sauvegarderNouveauRecordEtAfficherInfos("Mars", level);
+          level = 0;
           this.scene.restart();
         },
         null, this);   

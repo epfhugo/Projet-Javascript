@@ -12,11 +12,12 @@ var groupeBullets;
 
 var gameOver;
 
+
+
 // définition de la classe "selection"
 export default class selection extends Phaser.Scene {
   constructor() {
     super({ key: "selection" }); // mettre le meme nom que le nom de la classe
-
   }
 
   /***********************************************************************/

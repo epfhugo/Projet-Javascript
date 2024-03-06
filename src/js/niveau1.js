@@ -1,9 +1,9 @@
-import { tirer, chocAvecEnnemis, hit } from "/src/js/fonctions.js";
+import { tirer, chocAvecEnnemis, hit, sauvegarderNouveauRecordEtAfficherInfos } from "/src/js/fonctions.js";
 
 var groupeBullets; 
 var groupe_ennemis; 
 var level = 0; 
-var collisionActive = true;
+var collision;
 
 export default class niveau1 extends Phaser.Scene {
 
@@ -64,6 +64,7 @@ export default class niveau1 extends Phaser.Scene {
       this.player.setCollideWorldBounds(true); 
       this.player.setBounce(0.2);
 
+      
 
       // redimensionnement du monde avec les dimensions calculées via tiled
       this.physics.world.setBounds(0, 0, 6400, 610);
@@ -96,7 +97,6 @@ export default class niveau1 extends Phaser.Scene {
           objet.destroy();
       }
     });
-
       
     // extraction des poitns depuis le calque calque_ennemis, stockage dans tab_points
     const tab_points = carte_terre.getObjectLayer("calque_ennemi");   
@@ -118,13 +118,18 @@ export default class niveau1 extends Phaser.Scene {
       un_ennemi.pointsVie = 1;
     }); 
 
-    this.physics.add.overlap(this.player, groupe_ennemis, chocAvecEnnemis, null, this);
-
     this.physics.add.overlap(groupeBullets, groupe_ennemis, hit, null, this);
+
+    var timerImmunite = this.time.delayedCall(10000,
+      function () {
+         collision = this.physics.add.collider(this.player, groupe_ennemis, chocAvecEnnemis, null, this);
+      },
+      null, this);
 
     var monTimer = this.time.addEvent({
       delay: 20000, // ms
       callback: function () {
+        collision.destroy();
         level++;
         console.log(level);
         tab_points.objects.forEach((point, index) => {
@@ -151,12 +156,11 @@ export default class niveau1 extends Phaser.Scene {
           un_ennemi.pointsVie = 1;
         });
         console.log(groupe_ennemis.getLength());
-        this.collisionActive = false;
         var timerImmunite = this.time.delayedCall(10000,
           function () {
-          this.collisionActive = true;
+             collision = this.physics.add.collider(this.player, groupe_ennemis, chocAvecEnnemis, null, this);
           },
-          null, this); 
+          null, this);
       },
       args: [],
       callbackScope: this,
@@ -214,6 +218,8 @@ export default class niveau1 extends Phaser.Scene {
       this.gameOver = false;
       var timerRestart = this.time.delayedCall(1000,
         function () {
+          sauvegarderNouveauRecordEtAfficherInfos("Terre", level);
+          level = 0;
           this.scene.restart();
         },
         null, this);   

@@ -22,11 +22,9 @@ export function tirer(player, groupeBullets) {
 }  
 
 export function chocAvecEnnemis(un_player, un_groupe_ennemies) {
-  if (this.collisionActive) {
     this.physics.pause();
     this.player.setTint(0xff0000);
     this.gameOver = true;
-  }
 } 
 
 export function hit (bullet, ennemi) {
@@ -36,3 +34,18 @@ export function hit (bullet, ennemi) {
   } 
   bullet.destroy();
 }  
+
+export function sauvegarderNouveauRecordEtAfficherInfos(planet, score) {
+  // Récupérer le meilleur score pour la planète depuis le Local Storage
+  const meilleurScore = parseInt(localStorage.getItem(`meilleurScore_${planet}`)) || 0;
+  // Vérifier si le score actuel est un nouveau record
+  if (score > meilleurScore) {
+    // Mettre à jour le meilleur score pour la planète dans le Local Storage
+    localStorage.setItem(`meilleurScore_${planet}`, score);
+    console.log(`Nouveau record pour ${planet} enregistré !`);
+     console.log(`Score pour ${planet} :' ${score}`);
+  } else {
+    console.log(`Score pour ${planet} : ${score}`);
+    console.log(`Record pour ${planet} : ${meilleurScore}`);
+  }
+}
