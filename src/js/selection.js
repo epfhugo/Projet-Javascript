@@ -79,7 +79,7 @@ export default class selection extends Phaser.Scene {
     /****************************
     *  Ajout des Chiffres  *
     ****************************/
-    this.help = this.physics.add.staticSprite(1000, 590, "help");
+  
     this.chiffre1 = this.physics.add.staticSprite(350, 330, "chiffre1");
     this.chiffre2 = this.physics.add.staticSprite(980, 330, "chiffre2");
     this.chiffre3 = this.physics.add.staticSprite(1600, 330, "chiffre3");
@@ -92,7 +92,7 @@ export default class selection extends Phaser.Scene {
     *  Ajout du player *
     ****************************/
     this.player = this.physics.add.image(100, 450, "vaisseau_marche"); 
-    this.player.setSize(128,64);
+    this.player.setSize(110,55);
     this.player.setCollideWorldBounds(true);
     this.player.setBounce(0.2);
 

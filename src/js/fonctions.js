@@ -18,7 +18,7 @@ export function tirer(player, groupeBullets) {
   bullet.setCollideWorldBounds(true);
   bullet.body.onWorldBounds = true;  
   bullet.body.allowGravity =false;
-  bullet.setVelocity(1000 * coefDir, 0); // vitesse en x et en y
+  bullet.setVelocity(2000 * coefDir, 0); // vitesse en x et en y
 }  
 
 export function chocAvecEnnemis(un_player, un_groupe_ennemies) {

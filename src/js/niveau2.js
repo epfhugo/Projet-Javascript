@@ -125,7 +125,7 @@ export default class niveau2 extends Phaser.Scene {
 
 
   var monTimer = this.time.addEvent({
-    delay: 20000, // ms
+    delay: 30000, // ms
     callback: function () {
       collision.destroy();
       level++;
@@ -243,7 +243,7 @@ if (this.clavier.up.isDown) {
         tirer(this.player, groupeBullets);
         this.player.peutTirer = false; // on désactive la possibilté de tirer
         // on la réactive dans 2 secondes avec un timer
-        var timerTirOk = this.time.delayedCall(1000,
+        var timerTirOk = this.time.delayedCall(750,
            function () {
             this.player.peutTirer = true;
         },
