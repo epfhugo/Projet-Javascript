@@ -267,7 +267,7 @@ if (this.clavier.up.isDown) {
       this.gameOver = false;
       var timerRestart = this.time.delayedCall(1000,
         function () {
-          sauvegarderNouveauRecordEtAfficherInfos("Mars", vague);
+          sauvegarderNouveauRecordEtAfficherInfos("Mars", vague, score);
           vague = 0;
           this.score = 0;
           this.scene.restart();
