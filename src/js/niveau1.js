@@ -122,15 +122,31 @@ export default class niveau1 extends Phaser.Scene {
   
 
     var monTimer = this.time.addEvent({
-      delay: 5000, // ms
+      delay: 20000, // ms
       callback: function () {
-        tab_points.objects.forEach(point => {
-          if (point.name == "ennemi") {
-            var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_2");    
-            groupe_ennemis.add(nouvel_ennemi);
+        tab_points.objects.forEach((point, index) => {
+          if (point.name === "ennemi") {
+              var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_2");
+              groupe_ennemis.add(nouvel_ennemi);
           }
-        }); 
-    
+        });
+        // Tirer deux indices aléatoires
+        var index1 = Phaser.Math.Between(0, tab_points.objects.length - 1);
+        var index2 = Phaser.Math.Between(0, tab_points.objects.length - 1);
+        // Vérifier que les indices ne sont pas les mêmes
+        while (index1 === index2) {
+          index2 = Phaser.Math.Between(0, tab_points.objects.length - 1);
+        }
+        // Créer les ennemis aux positions correspondantes dans tab_points
+        tab_points.objects.forEach((point, index) => {
+          if (point.name === "ennemi") {
+            // Utiliser les positions des deux indices tirés
+            if (index === index1 || index === index2) {
+              var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_2");
+              groupe_ennemis.add(nouvel_ennemi);
+            }
+          }
+        });
         groupe_ennemis.children.iterate(function iterateur(un_ennemi) {
           un_ennemi.setCollideWorldBounds(true); 
           un_ennemi.setBounce(1);
@@ -184,7 +200,7 @@ export default class niveau1 extends Phaser.Scene {
         tirer(this.player, groupeBullets);
         this.player.peutTirer = false; // on désactive la possibilté de tirer
         // on la réactive dans 2 secondes avec un timer
-        var timerTirOk = this.time.delayedCall(1000,
+        var timerTirOk = this.time.delayedCall(1,
            function () {
             this.player.peutTirer = true;
         },
@@ -194,7 +210,7 @@ export default class niveau1 extends Phaser.Scene {
 
     if (this.gameOver) {
       this.gameOver = false;
-      var timerRestart = this.time.delayedCall(3000,
+      var timerRestart = this.time.delayedCall(1000,
         function () {
           this.scene.restart();
         },
