@@ -12,9 +12,6 @@ var groupeBullets;
 
 var gameOver;
 
-
-  
-
 // définition de la classe "selection"
 export default class selection extends Phaser.Scene {
   constructor() {

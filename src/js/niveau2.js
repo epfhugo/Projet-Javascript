@@ -110,36 +110,32 @@ export default class niveau2 extends Phaser.Scene {
   var monTimer = this.time.addEvent({
     delay: 20000, // ms
     callback: function () {
+      level++;
+      console.log(level);
       tab_points.objects.forEach((point, index) => {
         if (point.name === "ennemi") {
             var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_2");
             groupe_ennemis.add(nouvel_ennemi);
         }
-      });
-      // Tirer deux indices aléatoires
-      var index1 = Phaser.Math.Between(0, tab_points.objects.length - 1);
-      var index2 = Phaser.Math.Between(0, tab_points.objects.length - 1);
-      // Vérifier que les indices ne sont pas les mêmes
-      while (index1 === index2) {
-        index2 = Phaser.Math.Between(0, tab_points.objects.length - 1);
-      }
-      // Créer les ennemis aux positions correspondantes dans tab_points
-      tab_points.objects.forEach((point, index) => {
-        if (point.name === "ennemi") {
-          // Utiliser les positions des deux indices tirés
-          if (index === index1 || index === index2) {
-            var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_2");
+      })
+      let nb = 0;
+      while (nb < level * 2){
+        tab_points.objects.forEach((point, index) => {
+          if (point.name === "ennemi" && Phaser.Math.Between(1, 15) == 1) {
+            var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_1");
             groupe_ennemis.add(nouvel_ennemi);
+            nb++;
           }
-        }
-      });
+        });
+      }
       groupe_ennemis.children.iterate(function iterateur(un_ennemi) {
         un_ennemi.setCollideWorldBounds(true); 
         un_ennemi.setBounce(1);
         un_ennemi.setVelocityX(Phaser.Math.Between(-500, 500));
         un_ennemi.setVelocityY(Phaser.Math.Between(-500, 500));
-        un_ennemi.pointsVie = 1;
+        un_ennemi.pointsVie = 2;
       });;
+      console.log(groupe_ennemis.getLength());
     },
     args: [],
     callbackScope: this,
