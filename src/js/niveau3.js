@@ -183,7 +183,11 @@ export default class niveau3 extends Phaser.Scene {
     }
 
     if (this.gameOver) {
-      return;
+      var timerRestart = this.time.delayedCall(3000,
+        function () {
+          this.scene.restart();
+        },
+        null, this);   
     } 
     
   }
