@@ -263,7 +263,7 @@ if (this.clavier.up.isDown) {
       this.gameOver = false;
       var timerRestart = this.time.delayedCall(1000,
         function () {
-          sauvegarderNouveauRecordEtAfficherInfos("Lune", vague, score);
+          sauvegarderNouveauRecordEtAfficherInfos("Lune", vague, this.score);
           vague = 0;
           this.score = 0;
           this.scene.restart();
