@@ -22,9 +22,11 @@ export function tirer(player, groupeBullets) {
 }  
 
 export function chocAvecEnnemis(un_player, un_groupe_ennemies) {
-  this.physics.pause();
-  this.player.setTint(0xff0000);
-  this.gameOver = true;
+  if (this.collisionActive) {
+    this.physics.pause();
+    this.player.setTint(0xff0000);
+    this.gameOver = true;
+  }
 } 
 
 export function hit (bullet, ennemi) {
