@@ -64,6 +64,8 @@ export default class selection extends Phaser.Scene {
    * ainsi que toutes les instructions permettant de planifier des evenements
    */
   create() {
+
+  
     const carteDuNiveau = this.add.tilemap("carte");
 
     // chargement du jeu de tuiles

@@ -1,4 +1,5 @@
 // chargement des librairies
+import menu from "/src/js/menu.js"
 import selection from "/src/js/selection.js";
 import niveau1 from "/src/js/niveau1.js";
 import niveau2 from "/src/js/niveau2.js";
@@ -22,12 +23,12 @@ var config = {
       gravity: {
         y: 0 // gravité verticale : acceleration ddes corps en pixels par seconde
       },
-      debug: true // permet de voir les hitbox et les vecteurs d'acceleration quand mis à true
+      debug: false // permet de voir les hitbox et les vecteurs d'acceleration quand mis à true
     }
   },
-  scene: [selection, niveau1, niveau2, niveau3]
+  scene: [menu,selection, niveau1, niveau2, niveau3]
 };
 
 // création et lancement du jeu
 var game = new Phaser.Game(config);
-game.scene.start("selection");
+game.scene.start("menu");
