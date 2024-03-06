@@ -36,18 +36,30 @@ export function hit (bullet, ennemi) {
   bullet.destroy();
 }  
 
-export function sauvegarderNouveauRecordEtAfficherInfos(planet, score) {
-  // Récupérer le meilleur score pour la planète depuis le Local Storage
+export function sauvegarderNouveauRecordEtAfficherInfos(planet, vague, score) {
+  // Récupérer le meilleur score et la meilleure vague pour la planète depuis le Local Storage
   const meilleurScore = parseInt(localStorage.getItem(`meilleurScore_${planet}`)) || 0;
+  const meilleureVague = parseInt(localStorage.getItem(`meilleureVague_${planet}`)) || 0;
+
   // Vérifier si le score actuel est un nouveau record
   if (score > meilleurScore) {
     // Mettre à jour le meilleur score pour la planète dans le Local Storage
     localStorage.setItem(`meilleurScore_${planet}`, score);
     console.log(`Nouveau record pour ${planet} enregistré !`);
-     console.log(`Score pour ${planet} :' ${score}`);
-  } else {
     console.log(`Score pour ${planet} : ${score}`);
+  } else {
+    console.log(`Score actuel pour ${planet} : ${score}`);
     console.log(`Record pour ${planet} : ${meilleurScore}`);
   }
-  
+
+  // Vérifier si la vague actuelle est une nouvelle meilleure vague
+  if (vague > meilleureVague) {
+    // Mettre à jour la meilleure vague pour la planète dans le Local Storage
+    localStorage.setItem(`meilleureVague_${planet}`, vague);
+    console.log(`Nouvelle meilleure vague pour ${planet} enregistrée !`);
+    console.log(`Vague pour ${planet} : ${vague}`);
+  } else {
+    console.log(`Vague actuelle pour ${planet} : ${vague}`);
+    console.log(`Meilleure vague pour ${planet} : ${meilleureVague}`);
+  }
 }
