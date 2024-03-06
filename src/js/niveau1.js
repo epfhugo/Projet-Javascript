@@ -156,7 +156,7 @@ export default class niveau1 extends Phaser.Scene {
           }
         })
         let nb = 0;
-        while (nb < level * 2){
+        while (nb < vague * 2){
           tab_points.objects.forEach((point, index) => {
             if (point.name === "ennemi" && Phaser.Math.Between(1, 15) == 1) {
               var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_2");
