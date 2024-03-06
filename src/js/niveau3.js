@@ -120,7 +120,7 @@ export default class niveau3 extends Phaser.Scene {
     un_ennemi.pointsVie = 3;
   });
 
-  var timerImmunite = this.time.delayedCall(10000,
+  var timerImmunite = this.time.delayedCall(2000,
     function () {
        collision = this.physics.add.collider(this.player, groupe_ennemis, chocAvecEnnemis, null, this);
     },
@@ -159,7 +159,7 @@ export default class niveau3 extends Phaser.Scene {
         un_ennemi.pointsVie = 3;
       });;
       console.log(groupe_ennemis.getLength());
-      var timerImmunite = this.time.delayedCall(10000,
+      var timerImmunite = this.time.delayedCall(2000,
         function () {
            collision = this.physics.add.collider(this.player, groupe_ennemis, chocAvecEnnemis, null, this);
         },
