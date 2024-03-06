@@ -270,7 +270,7 @@ if (this.clavier.up.isDown) {
           sauvegarderNouveauRecordEtAfficherInfos("Mars", vague, this.score);
           vague = 0;
           this.score = 0;
-          this.scene.restart();
+          this.scene.start('menu.js');
         },
         null, this);   
     } 
