@@ -10,7 +10,8 @@ var boutonFeu;
 // mise en place d'une variable groupeBullets
 var groupeBullets;  
 
-var gameOver = false; 
+var gameOver;
+
 
   
 

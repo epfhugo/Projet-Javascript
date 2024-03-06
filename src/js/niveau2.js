@@ -1,7 +1,7 @@
 import { tirer, chocAvecEnnemis, hit } from "/src/js/fonctions.js";
 
 var groupeBullets;
-var groupe_ennemis;
+var groupe_ennemis; 
 
 export default class niveau2 extends Phaser.Scene {
   // constructeur de la classe
@@ -179,6 +179,7 @@ export default class niveau2 extends Phaser.Scene {
     }
 
     if (this.gameOver) {
+      this.gameOver = false;
       var timerRestart = this.time.delayedCall(3000,
         function () {
           this.scene.restart();
