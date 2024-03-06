@@ -3,7 +3,7 @@
 export default class menu extends Phaser.Scene {
 constructor() {
     super({key : "menu"});
-    this.planet;
+
 } 
   
   preload() {
@@ -16,6 +16,7 @@ constructor() {
     this.load.image("fond_terre", "src/assets/fond_terre.png");
     this.load.image("mars_fond", "src/assets/mars_fond.png");
     this.load.image("vaisseau_marche", "src/assets/vaisseau_marche.png");
+
   }
 
 
@@ -53,7 +54,7 @@ constructor() {
   bouton_SpaceBattle.setInteractive();
 
   var fond_lune = this.add.image(1500, 310, "lune_fond").setDepth(1);
-  fond_lune.setScale(1,1);
+  fond_lune.setScale(1,1.065);
   fond_lune.setInteractive();
 
   var fond_mars = this.add.image(440, 295, "mars_fond").setDepth(1);
@@ -71,6 +72,10 @@ constructor() {
   bouton_play.on("pointerup", () => {
   this.scene.start("selection");
   });
+
+  bouton_règle.on("pointerup", () => {
+    this.scene.start("regles");
+    });
 
   bouton_play.on("pointerout", () => {
   bouton_play.clearTint(); // Réinitialise la teinte du bouton
@@ -97,6 +102,7 @@ constructor() {
    window.close();
 
     });
+
 
   }
       
