@@ -274,7 +274,7 @@ if (this.clavier.up.isDown) {
           sauvegarderNouveauRecordEtAfficherInfos("Terre", vague, this.score);
           vague = 0;
           this.score = 0;
-          this.scene.start('menu.js');
+          this.scene.start('menu');
         },
         null, this);   
     } 
