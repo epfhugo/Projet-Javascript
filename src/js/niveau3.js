@@ -68,6 +68,8 @@ export default class niveau3 extends Phaser.Scene {
     // creation d'un attribut direction pour le joueur, initialisée avec 'right'
     this.player.direction = 'right'; 
 
+    this.player.peutTirer = true; 
+
     groupeBullets = this.physics.add.group();
 
     this.clavier = this.input.keyboard.createCursorKeys(); 
@@ -105,11 +107,33 @@ export default class niveau3 extends Phaser.Scene {
     un_ennemi.pointsVie = 3;
   });
 
-  
-
   this.physics.add.collider(this.player, groupe_ennemis, chocAvecEnnemis, null, this); 
 
   this.physics.add.overlap(groupeBullets, groupe_ennemis, hit, null,this);
+
+
+  var monTimer = this.time.addEvent({
+    delay: 5000, // ms
+    callback: function () {
+      tab_points.objects.forEach(point => {
+        if (point.name == "ennemi") {
+          var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_3");    
+          groupe_ennemis.add(nouvel_ennemi);
+        }
+      }); 
+  
+      groupe_ennemis.children.iterate(function iterateur(un_ennemi) {
+        un_ennemi.setCollideWorldBounds(true); 
+        un_ennemi.setBounce(1);
+        un_ennemi.setVelocityX(Phaser.Math.Between(-500, 500));
+        un_ennemi.setVelocityY(Phaser.Math.Between(-500, 500));
+        un_ennemi.pointsVie = 3;
+      });;
+    },
+    args: [],
+    callbackScope: this,
+    repeat: -1
+  }); 
 }
 
   update() {
@@ -146,7 +170,16 @@ export default class niveau3 extends Phaser.Scene {
     }
 
     if ( Phaser.Input.Keyboard.JustDown(this.boutonFeu)) {
-      tirer(this.player, groupeBullets);
+      if (this.player.peutTirer == true) {
+        tirer(this.player, groupeBullets);
+        this.player.peutTirer = false; // on désactive la possibilté de tirer
+        // on la réactive dans 2 secondes avec un timer
+        var timerTirOk = this.time.delayedCall(1000,
+           function () {
+            this.player.peutTirer = true;
+        },
+        null, this);  
+      } 
     }
 
     if (this.gameOver) {
