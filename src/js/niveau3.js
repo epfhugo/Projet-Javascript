@@ -1,9 +1,10 @@
-import { tirer, chocAvecEnnemis, hit } from "/src/js/fonctions.js";
+import { tirer, chocAvecEnnemis, hit, sauvegarderNouveauRecordEtAfficherInfos } from "/src/js/fonctions.js";
 
 var groupeBullets;
 var groupe_ennemis; 
 var vague = 0; 
 var vagueText;
+var scoreText;
 var collision;
 
 export default class niveau3 extends Phaser.Scene {
@@ -60,7 +61,14 @@ export default class niveau3 extends Phaser.Scene {
       fontSize: "24px",
       fill: "#FFFFFF" //Couleur de l'écriture
     });
-    vagueText.setScrollFactor(0); 
+    vagueText.setScrollFactor(0);
+    
+    this.score = 0;
+    scoreText = this.add.text(0, 30, "score : " + this.score, {
+      fontSize: "24px",
+      fill: "#FFFFFF" //Couleur de l'écriture
+    });
+    scoreText.setScrollFactor(0);
     
     this.player = this.physics.add.image(100, 450,"vaisseau_marche");
     this.player.setCollideWorldBounds(true); 
@@ -259,12 +267,15 @@ if (this.clavier.up.isDown) {
       this.gameOver = false;
       var timerRestart = this.time.delayedCall(1000,
         function () {
-          sauvegarderNouveauRecordEtAfficherInfos("Mars", level);
-          level = 0;
+          sauvegarderNouveauRecordEtAfficherInfos("Mars", vague);
+          vague = 0;
+          this.score = 0;
           this.scene.restart();
         },
         null, this);   
     } 
+
+    scoreText.setText("score : " + this.score);
     
   }
 

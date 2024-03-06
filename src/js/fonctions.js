@@ -27,11 +27,11 @@ export function chocAvecEnnemis(un_player, un_groupe_ennemies) {
     this.gameOver = true;
 } 
 
-export function hit (bullet, ennemi, score) {
+export function hit (bullet, ennemi) {
   ennemi.pointsVie--;
   if (ennemi.pointsVie==0) {
     ennemi.destroy(); 
-    score+= 10;
+    this.score+= 10;
   } 
   bullet.destroy();
 }  

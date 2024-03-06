@@ -5,7 +5,6 @@ var groupe_ennemis;
 var collision;
 var vague = 0; 
 var vagueText;
-var score = 0;
 var scoreText;
 
 export default class niveau1 extends Phaser.Scene {
@@ -69,7 +68,8 @@ export default class niveau1 extends Phaser.Scene {
       });
       vagueText.setScrollFactor(0); 
 
-      scoreText = this.add.text(0, 30, "score : " + score, {
+      this.score = 0;
+      scoreText = this.add.text(0, 30, "score : " + this.score, {
         fontSize: "24px",
         fill: "#FFFFFF" //Couleur de l'écriture
       });
@@ -148,9 +148,7 @@ export default class niveau1 extends Phaser.Scene {
         collision.destroy();
         vague++;
         vagueText.setText("Level : " + vague);
-        score++;
-        scoreText.setText("Level : " + score);
-        console.log(level);
+        console.log(vague);
         tab_points.objects.forEach((point, index) => {
           if (point.name === "ennemi") {
               var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_2");
@@ -188,35 +186,34 @@ export default class niveau1 extends Phaser.Scene {
   }
 
   update() {
-
-// Gestion des mouvements horizontaux
-if (this.clavier.left.isDown) {
-  // Accélération progressive vers la gauche
-  this.player.setVelocityX(Math.max(this.player.body.velocity.x - this.player.acceleration, -this.player.vitesseMax));
-  this.player.setTexture("vaisseau_recule");
-  this.player.direction = 'left';
-} else if (this.clavier.right.isDown) {
-  // Accélération progressive vers la droite
-  this.player.setVelocityX(Math.min(this.player.body.velocity.x + this.player.acceleration, this.player.vitesseMax));
-  this.player.setTexture("vaisseau_marche");
-  this.player.direction = 'right';
-} else {
-  // Freinage progressif en cas de relâchement des touches horizontales
-  if (this.player.body.velocity.x > 0) {
-    this.player.setVelocityX(Math.max(this.player.body.velocity.x - 2 * this.player.acceleration, 0));
-    this.player.setTexture("vaisseau_marche");
-  } else if (this.player.body.velocity.x < 0) {
-    this.player.setVelocityX(Math.min(this.player.body.velocity.x + 2 * this.player.acceleration, 0));
+  // Gestion des mouvements horizontaux
+  if (this.clavier.left.isDown) {
+    // Accélération progressive vers la gauche
+    this.player.setVelocityX(Math.max(this.player.body.velocity.x - this.player.acceleration, -this.player.vitesseMax));
     this.player.setTexture("vaisseau_recule");
+    this.player.direction = 'left';
+  } else if (this.clavier.right.isDown) {
+    // Accélération progressive vers la droite
+    this.player.setVelocityX(Math.min(this.player.body.velocity.x + this.player.acceleration, this.player.vitesseMax));
+    this.player.setTexture("vaisseau_marche");
+    this.player.direction = 'right';
   } else {
-    // Ajout de la condition pour la texture lorsque le vaisseau est immobile horizontalement
-    if (this.player.direction === 'left') {
-      this.player.setTexture("vaisseau_arrêt_recule");
-    } else if (this.player.direction === 'right') {
-      this.player.setTexture("vaisseau_arrêt");
+    // Freinage progressif en cas de relâchement des touches horizontales
+    if (this.player.body.velocity.x > 0) {
+      this.player.setVelocityX(Math.max(this.player.body.velocity.x - 2 * this.player.acceleration, 0));
+      this.player.setTexture("vaisseau_marche");
+    } else if (this.player.body.velocity.x < 0) {
+      this.player.setVelocityX(Math.min(this.player.body.velocity.x + 2 * this.player.acceleration, 0));
+      this.player.setTexture("vaisseau_recule");
+    } else {
+      // Ajout de la condition pour la texture lorsque le vaisseau est immobile horizontalement
+      if (this.player.direction === 'left') {
+        this.player.setTexture("vaisseau_arrêt_recule");
+      } else if (this.player.direction === 'right') {
+        this.player.setTexture("vaisseau_arrêt");
+      }
     }
   }
-}
 
 // Gestion des mouvements verticaux
 if (this.clavier.up.isDown) {
@@ -274,12 +271,16 @@ if (this.clavier.up.isDown) {
       this.gameOver = false;
       var timerRestart = this.time.delayedCall(1000,
         function () {
-          sauvegarderNouveauRecordEtAfficherInfos("Terre", level);
-          level = 0;
+          sauvegarderNouveauRecordEtAfficherInfos("Terre", vague);
+          vague = 0;
+          this.score = 0;
           this.scene.restart();
         },
         null, this);   
     } 
+
+    console.log(this.score);
+    scoreText.setText("score : " + this.score);
 
   }
 

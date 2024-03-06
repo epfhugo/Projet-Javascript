@@ -12,6 +12,8 @@ var groupeBullets;
 
 var gameOver;
 
+var score = 0;
+
 
 
 // définition de la classe "selection"
