@@ -152,7 +152,7 @@ export default class niveau2 extends Phaser.Scene {
     un_ennemi.pointsVie = 2;
   }); 
 
-  var timerImmunite = this.time.delayedCall(2000,
+  var timerImmunite = this.time.delayedCall(3000,
     function () {
        collision = this.physics.add.collider(this.player, groupe_ennemis, chocAvecEnnemis, null, this);
     },
@@ -192,7 +192,7 @@ export default class niveau2 extends Phaser.Scene {
         un_ennemi.pointsVie = 2;
       });;
       console.log(groupe_ennemis.getLength());
-      var timerImmunite = this.time.delayedCall(2000,
+      var timerImmunite = this.time.delayedCall(3000,
         function () {
            collision = this.physics.add.collider(this.player, groupe_ennemis, chocAvecEnnemis, null, this);
         },
@@ -280,7 +280,7 @@ if (this.clavier.up.isDown) {
         tirer(this.player, groupeBullets);
         this.player.peutTirer = false; // on désactive la possibilté de tirer
         // on la réactive dans 2 secondes avec un timer
-        var timerTirOk = this.time.delayedCall(75,
+        var timerTirOk = this.time.delayedCall(400,
            function () {
             this.player.peutTirer = true;
         },
