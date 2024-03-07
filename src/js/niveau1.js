@@ -7,6 +7,8 @@ var collision;
 var vague = 0; 
 var vagueText;
 var scoreText;
+var chronoText;
+var chrono = 30;
 
 export default class niveau1 extends Phaser.Scene {
 
@@ -66,18 +68,34 @@ export default class niveau1 extends Phaser.Scene {
       this.musique_fond = this.sound.add('musique_niveau1');
       this.musique_fond.play();
 
-      vagueText = this.add.text(0, 0, "vague : " + vague, {
+      vagueText = this.add.text(0, 40, "vague : " + vague, {
         fontSize: "24px",
         fill: "#FFFFFF" //Couleur de l'écriture
       });
       vagueText.setScrollFactor(0); 
 
       this.score = 0;
-      scoreText = this.add.text(0, 30, "score : " + this.score, {
+      scoreText = this.add.text(0, 70, "score : " + this.score, {
         fontSize: "24px",
         fill: "#FFFFFF" //Couleur de l'écriture
       });
       scoreText.setScrollFactor(0); 
+
+      chronoText = this.add.text(0, 10, "Temps restant avant la prochaine vague : " + chrono, {
+        fontSize: "24px",
+        fill: "#FFFFFF" //Couleur de l'écriture
+      });
+      chronoText.setScrollFactor(0);  
+
+      monTimer = this.time.addEvent({
+        delay: 1000,
+        callback: function compteUneSeconde () {
+          chrono= chrono-1; // on incremente le chronometre d'une unite
+          chronoText.setText("Temps restant avant la prochaine vague : " + chrono); // mise à jour de l'affichage
+        },
+        callbackScope: this,
+        loop: true
+      });  
 
       this.player = this.physics.add.image(100, 450,"vaisseau_marche");
       this.player.setCollideWorldBounds(true); 
@@ -152,6 +170,7 @@ export default class niveau1 extends Phaser.Scene {
         collision.destroy();
         vague++;
         vagueText.setText("Level : " + vague);
+        chrono = 30;
         console.log(vague);
         tab_points.objects.forEach((point, index) => {
           if (point.name === "ennemi") {
@@ -263,7 +282,7 @@ if (this.clavier.up.isDown) {
         tirer(this.player, groupeBullets);
         this.player.peutTirer = false; // on désactive la possibilté de tirer
         // on la réactive dans 2 secondes avec un timer
-        var timerTirOk = this.time.delayedCall(1000,
+        var timerTirOk = this.time.delayedCall(1,
            function () {
             this.player.peutTirer = true;
         },
@@ -271,6 +290,7 @@ if (this.clavier.up.isDown) {
       } 
     }
     
+
     if (this.gameOver) {
       this.gameOver = false;
       this.musique_fond.stop();

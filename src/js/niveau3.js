@@ -6,6 +6,8 @@ var vague = 0;
 var vagueText;
 var scoreText;
 var collision;
+var chronoText;
+var chrono = 30;
 
 export default class niveau3 extends Phaser.Scene {
   // constructeur de la classe
@@ -72,6 +74,22 @@ export default class niveau3 extends Phaser.Scene {
       fill: "#FFFFFF" //Couleur de l'écriture
     });
     scoreText.setScrollFactor(0);
+
+    chronoText = this.add.text(0, 10, "Temps restant avant la prochaine vague : " + chrono, {
+      fontSize: "24px",
+      fill: "#FFFFFF" //Couleur de l'écriture
+    });
+    chronoText.setScrollFactor(0);  
+
+    monTimer = this.time.addEvent({
+      delay: 1000,
+      callback: function compteUneSeconde () {
+        chrono= chrono-1; // on incremente le chronometre d'une unite
+        chronoText.setText("Temps restant avant la prochaine vague : " + chrono); // mise à jour de l'affichage
+      },
+      callbackScope: this,
+      loop: true
+    });  
     
     this.player = this.physics.add.image(100, 450,"vaisseau_marche");
     this.player.setCollideWorldBounds(true); 
@@ -145,6 +163,7 @@ export default class niveau3 extends Phaser.Scene {
       collision.destroy();
       vague++;
       vagueText.setText("Level : " + vague);
+      chrono = 30;
       console.log(level);
       tab_points.objects.forEach((point, index) => {
         if (point.name === "ennemi") {
