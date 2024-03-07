@@ -37,7 +37,7 @@ export function hit (bullet, ennemi) {
 }  
 
 export function sauvegarderNouveauRecordEtAfficherInfos(planet, vague, score) {
-  // Récupérer le meilleur score et la meilleure vague pour la planète depuis le Local Storage
+  // Récupérer le meilleur score, la meilleure vague, le dernier score et la dernière vague pour la planète depuis le Local Storage
   const meilleurScore = parseInt(localStorage.getItem(`meilleurScore_${planet}`)) || 0;
   const meilleureVague = parseInt(localStorage.getItem(`meilleureVague_${planet}`)) || 0;
 
@@ -45,21 +45,25 @@ export function sauvegarderNouveauRecordEtAfficherInfos(planet, vague, score) {
   if (score > meilleurScore) {
     // Mettre à jour le meilleur score pour la planète dans le Local Storage
     localStorage.setItem(`meilleurScore_${planet}`, score);
-    console.log(`Nouveau record pour ${planet} enregistré !`);
-    console.log(`Score pour ${planet} : ${score}`);
-  } else {
-    console.log(`Score actuel pour ${planet} : ${score}`);
-    console.log(`Record pour ${planet} : ${meilleurScore}`);
   }
 
   // Vérifier si la vague actuelle est une nouvelle meilleure vague
   if (vague > meilleureVague) {
     // Mettre à jour la meilleure vague pour la planète dans le Local Storage
     localStorage.setItem(`meilleureVague_${planet}`, vague);
-    console.log(`Nouvelle meilleure vague pour ${planet} enregistrée !`);
-    console.log(`Vague pour ${planet} : ${vague}`);
-  } else {
-    console.log(`Vague actuelle pour ${planet} : ${vague}`);
-    console.log(`Meilleure vague pour ${planet} : ${meilleureVague}`);
   }
+
+  // Mettre à jour le dernier score pour la planète dans le Local Storage
+  localStorage.setItem(`dernierScore_${planet}`, score);
+
+  // Mettre à jour la dernière vague pour la planète dans le Local Storage
+  localStorage.setItem(`derniereVague_${planet}`, vague);
+
+  const dernierScore = parseInt(localStorage.getItem(`dernierScore_${planet}`)) || 0;
+  const derniereVague = parseInt(localStorage.getItem(`derniereVague_${planet}`)) || 0;
+
+  console.log("Meilleur Score:", meilleurScore);
+  console.log("Meilleure Vague:", meilleureVague);
+  console.log("Dernier Score:", dernierScore);
+  console.log("Dernière Vague:", derniereVague);
 }

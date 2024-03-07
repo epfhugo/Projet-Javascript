@@ -95,8 +95,8 @@ export default class niveau2 extends Phaser.Scene {
     this.player.setCollideWorldBounds(true); 
     this.player.setBounce(0.2);
 
-    musique_niveau2 = this.sound.add('musique_niveau2'); 
-    musique_niveau2.play(); 
+    this.musique_niveau2 = this.sound.add('musique_niveau2'); 
+    this.musique_niveau2.play(); 
 
     this.player.vitesseMax = 800; // Vitesse maximale du vaisseau
     this.player.acceleration = 7; // Accélération du vaisseau
@@ -290,13 +290,14 @@ if (this.clavier.up.isDown) {
 
     if (this.gameOver) {
       this.gameOver = false;
+      this.musique_niveau2.destroy();
       this.musique_fond.stop();
-      sauvegarderNouveauRecordEtAfficherInfos("Lune", vague, this.score);
-      vague = 0;
-      this.score = 0;
+      sauvegarderNouveauRecordEtAfficherInfos('lune', vague, this.score);
       var timerRestart = this.time.delayedCall(1000,
         function () {
-          this.scene.start('menu');
+          vague = 0;
+          this.score = 0;
+          this.scene.start('finLune');
         },
         null, this);   
     } 

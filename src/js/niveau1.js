@@ -296,13 +296,12 @@ if (this.clavier.up.isDown) {
     if (this.gameOver) {
       this.gameOver = false;
       this.musique_fond.stop();
-      sauvegarderNouveauRecordEtAfficherInfos("Terre", vague, this.score);
-      vague = 0;
-      this.score = 0;
+      sauvegarderNouveauRecordEtAfficherInfos('terre', vague, this.score);
       var timerRestart = this.time.delayedCall(1000,
         function () {
-          this.scene.start('menu');
-        
+          vague = 0;
+          this.score = 0;
+          this.scene.start('finTerre');
         },
         null, this);   
     } 

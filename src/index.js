@@ -4,6 +4,9 @@ import selection from "/src/js/selection.js";
 import niveau1 from "/src/js/niveau1.js";
 import niveau2 from "/src/js/niveau2.js";
 import niveau3 from "/src/js/niveau3.js";
+import finTerre from "/src/js/finTerre.js";
+import finLune from "/src/js/finLune.js";
+import finMars from "/src/js/finMars.js";
 import regles from "/src/js/regles.js"
 
 // configuration générale du jeu
@@ -27,7 +30,7 @@ var config = {
       debug: false // permet de voir les hitbox et les vecteurs d'acceleration quand mis à true
     }
   },
-  scene: [menu, selection, niveau1, niveau2, niveau3, regles]
+  scene: [menu, selection, niveau1, niveau2, niveau3, finTerre, finLune, finMars, regles]
 };
 
 // création et lancement du jeu
