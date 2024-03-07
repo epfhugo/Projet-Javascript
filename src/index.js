@@ -24,7 +24,7 @@ var config = {
       gravity: {
         y: 0 // gravité verticale : acceleration ddes corps en pixels par seconde
       },
-      debug: false // permet de voir les hitbox et les vecteurs d'acceleration quand mis à true
+      debug: true // permet de voir les hitbox et les vecteurs d'acceleration quand mis à true
     }
   },
   scene: [menu, selection, niveau1, niveau2, niveau3, regles]

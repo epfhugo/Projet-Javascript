@@ -1,3 +1,4 @@
+
 import { tirer, chocAvecEnnemis, hit, sauvegarderNouveauRecordEtAfficherInfos } from "/src/js/fonctions.js";
 
 var groupeBullets; 
@@ -25,6 +26,8 @@ export default class niveau1 extends Phaser.Scene {
     this.load.image("vaisseau_haut_2", "src/assets/vaisseau_haut_2.png");
     this.load.image("vaisseau_haut_gauche", "src/assets/vaisseau_haut_gauche.png");
     this.load.image("vaisseau_arrêt", "src/assets/vaisseau_arrêt.png");
+    this.load.audio("musique_selection", "src/assets/musique_selection.mp3");
+    this.load.audio("musique_niveau1", "src/assets/musique_niveau1.mp3");
   }
  
   create() {
@@ -266,7 +269,7 @@ if (this.clavier.up.isDown) {
         null, this);  
       } 
     }
-
+    
     if (this.gameOver) {
       this.gameOver = false;
       var timerRestart = this.time.delayedCall(1000,
@@ -275,6 +278,7 @@ if (this.clavier.up.isDown) {
           vague = 0;
           this.score = 0;
           this.scene.start('menu');
+        
         },
         null, this);   
     } 
@@ -285,4 +289,3 @@ if (this.clavier.up.isDown) {
   }
 
 }
-

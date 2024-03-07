@@ -7,7 +7,7 @@ export default class regles extends Phaser.Scene {
     preload() {
         this.load.image("règles 1", "src/assets/règles 1.png");
         this.load.image("règles 2", "src/assets/règles 2.png");
-        this.load.image("bouton_quit", "src/assets/bouton_quit.png");
+        this.load.image("bouton_quit - Copie", "src/assets/bouton_quit - Copie.png");
   
       }
 
@@ -35,7 +35,7 @@ export default class regles extends Phaser.Scene {
     règle2.setScale(0.8,0.8);
     règle2.setInteractive();
 
-    var bouton_quit = this.add.image(1790, 500, "bouton_quit").setDepth(2);
+    var bouton_quit = this.add.image(1790, 500, "bouton_quit - Copie").setDepth(2);
     bouton_quit.setScale(1,1);
     bouton_quit.setInteractive();
 
@@ -49,6 +49,7 @@ export default class regles extends Phaser.Scene {
 
     bouton_quit.on("pointerup", () => {
     this.scene.start("menu");
+    this.scene.stop('regles');
 
     });
 

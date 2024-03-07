@@ -20,7 +20,14 @@ var score = 0;
 export default class selection extends Phaser.Scene {
   constructor() {
     super({ key: "selection" }); // mettre le meme nom que le nom de la classe
+
+        // Déclaration des variables de musique au niveau de la classe
+        this.musique_selection = null;
+        this.musique_niveau2 = null;
+        this.musique_niveau3 = null;
+        this.musique_niveau1 = null;
   }
+
 
   /***********************************************************************/
   /** FONCTION PRELOAD 
@@ -47,6 +54,10 @@ export default class selection extends Phaser.Scene {
     this.load.image("vaisseau_haut_gauche", "src/assets/vaisseau_haut_gauche.png");
     this.load.image("vaisseau_arrêt", "src/assets/vaisseau_arrêt.png");
     this.load.image("monstre_3", "src/assets/monstre_3.png");
+    this.load.audio("musique_selection", "src/assets/musique_selection.mp3");
+    this.load.audio("musique_niveau2", "src/assets/musique_niveau2.mp3");
+    this.load.audio("musique_niveau3", "src/assets/musique_niveau3.mp3");
+    this.load.audio("musique_niveau1", "src/assets/musique_niveau1.mp3");
 
     // chargement tuiles de jeu
     this.load.image("Phaser_tuilesdejeu", "src/assets/Tile_NiveauLune.png");
@@ -66,7 +77,7 @@ export default class selection extends Phaser.Scene {
    * ainsi que toutes les instructions permettant de planifier des evenements
    */
   create() {
-  
+
     const carteDuNiveau = this.add.tilemap("carte");
 
     // chargement du jeu de tuiles
@@ -98,6 +109,10 @@ export default class selection extends Phaser.Scene {
     this.player.setCollideWorldBounds(true);
     this.player.setBounce(0.2);
 
+      // Initialisation et lecture de la musique de la sélection
+  this.musique_selection = this.sound.add('musique_selection');
+  this.musique_selection.play();
+  
     this.player.vitesseMax = 800; // Vitesse maximale du vaisseau
     this.player.acceleration = 7; // Accélération du vaisseau
 
@@ -207,6 +222,44 @@ if (clavier.up.isDown) {
   }
 }
 
+    // ... (gestion des mouvements, collisions, etc.)
+
+    if (Phaser.Input.Keyboard.JustDown(clavier.space)) {
+      // Arrêt de la musique de sélection
+      if (this.musique_selection) {
+        this.musique_selection.stop();
+      }
+
+      // Commutation vers la musique du niveau 2 et chargement du niveau 2
+      if (this.physics.overlap(this.player, this.chiffre2)) {
+        // Vérification avant de jouer la musique du niveau 2
+        if (!this.musique_niveau2) {
+          this.musique_niveau2 = this.sound.add('musique_niveau2');
+          this.musique_niveau2.play();
+        }
+        this.scene.switch("niveau2");
+      }
+
+      // Commutation vers la musique du niveau 3 et chargement du niveau 3
+      if (this.physics.overlap(this.player, this.chiffre3)) {
+        // Vérification avant de jouer la musique du niveau 3
+        if (!this.musique_niveau3) {
+          this.musique_niveau3 = this.sound.add('musique_niveau3');
+          this.musique_niveau3.play();
+        }
+        this.scene.switch("niveau3");
+      }
+
+      // Commutation vers la musique du niveau 1 et chargement du niveau 1
+      if (this.physics.overlap(this.player, this.chiffre1)) {
+        // Vérification avant de jouer la musique du niveau 1
+        if (!this.musique_niveau1) {
+          this.musique_niveau1 = this.sound.add('musique_niveau1');
+          this.musique_niveau1.play();
+        }
+        this.scene.switch("niveau1");
+      }
+    }
 
     if (Phaser.Input.Keyboard.JustDown(clavier.space)) {
       if (this.physics.overlap(this.player, this.chiffre1))
@@ -215,7 +268,7 @@ if (clavier.up.isDown) {
         this.scene.switch("niveau2");
       if (this.physics.overlap(this.player, this.chiffre3))
         this.scene.switch("niveau3");
-    }
+    
 
     if ( Phaser.Input.Keyboard.JustDown(boutonFeu)) {
       if (this.player.peutTirer == true) {
@@ -229,5 +282,6 @@ if (clavier.up.isDown) {
         null, this);  
       }
     }  
+  }
   }
 }

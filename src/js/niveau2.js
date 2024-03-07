@@ -7,6 +7,7 @@ var vagueText;
 var scoreText;
 var collision;
 
+
 export default class niveau2 extends Phaser.Scene {
   // constructeur de la classe
   constructor() {
@@ -24,10 +25,14 @@ export default class niveau2 extends Phaser.Scene {
     this.load.image("vaisseau_haut_2", "src/assets/vaisseau_haut_2.png");
     this.load.image("vaisseau_haut_gauche", "src/assets/vaisseau_haut_gauche.png");
     this.load.image("vaisseau_arrêt", "src/assets/vaisseau_arrêt.png");
+    this.load.audio("musique_niveau2", "src/assets/musique_niveau2.mp3");
 
   }
 
   create() {
+
+    var musique_niveau2
+
     const carte_lune = this.add.tilemap("carte_lune");
     const tileset = carte_lune.addTilesetImage("Tile_NiveauMoon",'Tuiles_Moon');
 
@@ -68,6 +73,9 @@ export default class niveau2 extends Phaser.Scene {
     this.player = this.physics.add.image(100, 450,"vaisseau_marche");
     this.player.setCollideWorldBounds(true); 
     this.player.setBounce(0.2);
+
+    musique_niveau2 = this.sound.add('musique_niveau2'); 
+    musique_niveau2.play(); 
 
     this.player.vitesseMax = 800; // Vitesse maximale du vaisseau
     this.player.acceleration = 7; // Accélération du vaisseau
@@ -177,7 +185,7 @@ export default class niveau2 extends Phaser.Scene {
 }
 
   update() {
-
+    
 // Gestion des mouvements horizontaux
 if (this.clavier.left.isDown) {
   // Accélération progressive vers la gauche
