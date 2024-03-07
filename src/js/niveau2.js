@@ -25,8 +25,6 @@ export default class niveau2 extends Phaser.Scene {
     this.load.image("vaisseau_haut_2", "src/assets/vaisseau_haut_2.png");
     this.load.image("vaisseau_haut_gauche", "src/assets/vaisseau_haut_gauche.png");
     this.load.image("vaisseau_arrêt", "src/assets/vaisseau_arrêt.png");
-    this.load.audio("musique_niveau2", "src/assets/musique_niveau2.mp3");
-
   }
 
   create() {
@@ -56,6 +54,9 @@ export default class niveau2 extends Phaser.Scene {
       "ennemi",
       tileset
     )
+
+    this.musique_fond = this.sound.add('musique_niveau2');
+    this.musique_fond.play();
 
     vagueText = this.add.text(0, 0, "Level : " + vague, {
       fontSize: "24px",
@@ -268,12 +269,13 @@ if (this.clavier.up.isDown) {
     }
 
     if (this.gameOver) {
-      this.gameOver = false;
+      this.gameOver = false;$
+      this.musique_fond.stop();
+      sauvegarderNouveauRecordEtAfficherInfos("Lune", vague, this.score);
+      vague = 0;
+      this.score = 0;
       var timerRestart = this.time.delayedCall(1000,
         function () {
-          sauvegarderNouveauRecordEtAfficherInfos("Lune", vague, this.score);
-          vague = 0;
-          this.score = 0;
           this.scene.start('menu');
         },
         null, this);   

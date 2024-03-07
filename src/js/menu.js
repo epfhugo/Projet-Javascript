@@ -1,15 +1,9 @@
 
+  var musique_fond
 
   export default class menu extends Phaser.Scene {
   constructor() {
       super({key : "menu"});
-
-      // Déclaration des variables de musique au niveau de la classe
-      this.musique_menu = null;
-      this.musique_niveau1 = null;
-      this.musique_niveau2 = null;
-      this.musique_niveau3 = null;
-      this.clavier = null;
   } 
     
     preload() {
@@ -23,7 +17,11 @@
       this.load.image("fond_terre", "src/assets/fond_terre.png");
       this.load.image("mars_fond", "src/assets/mars_fond.png");
       this.load.image("vaisseau_marche", "src/assets/vaisseau_marche.png");
-      this.load.audio("musique_fond", "src/assets/musique_menu.mp3");
+      this.load.audio("musique_menu", "src/assets/musique_menu.mp3");
+      this.load.audio("musique_selection", "src/assets/musique_selection.mp3");
+      this.load.audio("musique_niveau2", "src/assets/musique_niveau2.mp3");
+      this.load.audio("musique_niveau3", "src/assets/musique_niveau3.mp3");
+      this.load.audio("musique_niveau1", "src/assets/musique_niveau1.mp3");
 
     }
 
@@ -40,9 +38,8 @@
     */
     
     create() {
-
-  var musique_fond
-    // on place les éléments de fond
+    this.musique_fond = this.sound.add('musique_menu'); 
+    this.musique_fond.play(); 
 
     this.clavier = this.input.keyboard.createCursorKeys();
 
@@ -81,12 +78,12 @@
     });
 
     bouton_play.on("pointerup", () => {
-      musique_fond.stop();
+    this.musique_fond.stop(); 
     this.scene.start("selection");
     });
 
     bouton_règle.on("pointerup", () => {
-      musique_fond.stop();
+      this.musique_fond.stop(); 
       this.scene.start("regles");
       });
 
@@ -111,16 +108,12 @@
     });
 
     bouton_quit.on("pointerup", () => {
-      musique_fond.stop();
     this.scene.stop("menu");
+    this.musique_fond.stop(); 
     window.close();
+    });
 
-      });
-
-      this.scene.stop('regles');
-
-      musique_fond = this.sound.add('musique_fond'); 
-      musique_fond.play(); 
+    this.scene.stop('regles');
     }
         
     update() {

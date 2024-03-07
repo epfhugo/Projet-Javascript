@@ -57,6 +57,9 @@ export default class niveau3 extends Phaser.Scene {
       tileset
     )
 
+    this.musique_fond = this.sound.add('musique_niveau3');
+    this.musique_fond.play();
+
     vagueText = this.add.text(0, 0, "Level : " + vague, {
       fontSize: "24px",
       fill: "#FFFFFF" //Couleur de l'écriture
@@ -265,11 +268,12 @@ if (this.clavier.up.isDown) {
 
     if (this.gameOver) {
       this.gameOver = false;
+      this.musique_fond.stop();
+      sauvegarderNouveauRecordEtAfficherInfos("Mars", vague, this.score);
+      vague = 0;
+      this.score = 0;
       var timerRestart = this.time.delayedCall(1000,
         function () {
-          sauvegarderNouveauRecordEtAfficherInfos("Mars", vague, this.score);
-          vague = 0;
-          this.score = 0;
           this.scene.start('menu');
         },
         null, this);   
