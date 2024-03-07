@@ -4,11 +4,11 @@ import { tirer, chocAvecEnnemis, hit, sauvegarderNouveauRecordEtAfficherInfos } 
 var groupeBullets; 
 var groupe_ennemis; 
 var collision;
-var vague = 0; 
+var vague; 
 var vagueText;
 var scoreText;
 var chronoText;
-var chrono = 30;
+var chrono;
 
 export default class niveau1 extends Phaser.Scene {
 
@@ -68,6 +68,7 @@ export default class niveau1 extends Phaser.Scene {
       this.musique_fond = this.sound.add('musique_niveau1');
       this.musique_fond.play();
 
+      vague = 0;
       vagueText = this.add.text(0, 40, "vague : " + vague, {
         fontSize: "24px",
         fill: "#FFFFFF" //Couleur de l'écriture
@@ -81,6 +82,7 @@ export default class niveau1 extends Phaser.Scene {
       });
       scoreText.setScrollFactor(0); 
 
+      chrono = 30;
       chronoText = this.add.text(0, 10, "Temps restant avant la prochaine vague : " + chrono, {
         fontSize: "24px",
         fill: "#FFFFFF" //Couleur de l'écriture

@@ -2,12 +2,12 @@ import { tirer, chocAvecEnnemis, hit, sauvegarderNouveauRecordEtAfficherInfos } 
 
 var groupeBullets;
 var groupe_ennemis; 
-var vague = 0; 
+var vague; 
 var vagueText;
 var scoreText;
 var collision;
 var chronoText;
-var chrono = 30;
+var chrono;
 
 export default class niveau3 extends Phaser.Scene {
   // constructeur de la classe
@@ -62,19 +62,21 @@ export default class niveau3 extends Phaser.Scene {
     this.musique_fond = this.sound.add('musique_niveau3');
     this.musique_fond.play();
 
-    vagueText = this.add.text(0, 0, "Level : " + vague, {
+    vague = 0;
+    vagueText = this.add.text(0, 40, "Level : " + vague, {
       fontSize: "24px",
       fill: "#FFFFFF" //Couleur de l'écriture
     });
     vagueText.setScrollFactor(0);
     
     this.score = 0;
-    scoreText = this.add.text(0, 30, "score : " + this.score, {
+    scoreText = this.add.text(0, 70, "score : " + this.score, {
       fontSize: "24px",
       fill: "#FFFFFF" //Couleur de l'écriture
     });
     scoreText.setScrollFactor(0);
 
+    chrono = 60;
     chronoText = this.add.text(0, 10, "Temps restant avant la prochaine vague : " + chrono, {
       fontSize: "24px",
       fill: "#FFFFFF" //Couleur de l'écriture
@@ -162,12 +164,11 @@ export default class niveau3 extends Phaser.Scene {
     callback: function () {
       collision.destroy();
       vague++;
-      vagueText.setText("Level : " + vague);
-      chrono = 30;
-      console.log(level);
+      vagueText.setText("vague : " + vague);
+      chrono = 60;
       tab_points.objects.forEach((point, index) => {
         if (point.name === "ennemi") {
-            var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_2");
+            var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_3");
             groupe_ennemis.add(nouvel_ennemi);
         }
       })
@@ -277,7 +278,7 @@ if (this.clavier.up.isDown) {
         tirer(this.player, groupeBullets);
         this.player.peutTirer = false; // on désactive la possibilté de tirer
         // on la réactive dans 2 secondes avec un timer
-        var timerTirOk = this.time.delayedCall(500,
+        var timerTirOk = this.time.delayedCall(50,
            function () {
             this.player.peutTirer = true;
         },
