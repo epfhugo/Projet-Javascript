@@ -83,7 +83,7 @@ export default class niveau1 extends Phaser.Scene {
       scoreText.setScrollFactor(0); 
 
       chrono = 30;
-      chronoText = this.add.text(0, 10, "Temps restant avant la prochaine vague : " + chrono, {
+      chronoText = this.add.text(0, 10, "Temps restant avant la prochaine vague : " + chrono + " secondes", {
         fontSize: "24px",
         fill: "#FFFFFF" //Couleur de l'écriture
       });
@@ -93,7 +93,7 @@ export default class niveau1 extends Phaser.Scene {
         delay: 1000,
         callback: function compteUneSeconde () {
           chrono= chrono-1; // on incremente le chronometre d'une unite
-          chronoText.setText("Temps restant avant la prochaine vague : " + chrono); // mise à jour de l'affichage
+          chronoText.setText("Temps restant avant la prochaine vague : " + chrono + " secondes"); // mise à jour de l'affichage
         },
         callbackScope: this,
         loop: true
