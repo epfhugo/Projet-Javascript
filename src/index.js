@@ -14,11 +14,11 @@ var config = {
   type: Phaser.AUTO,
   width: 1920, // largeur en pixels
   height: 600, // hauteur en pixels
-   scale: {
-        // Or set parent divId here
-        mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH
-   },
+  scale: {
+    // Or set parent divId here
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH
+  },
   physics: {
     // définition des parametres physiques
     default: "arcade", // mode arcade : le plus simple : des rectangles pour gérer les collisions. Pas de pentes

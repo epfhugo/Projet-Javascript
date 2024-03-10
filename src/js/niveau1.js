@@ -1,10 +1,10 @@
 
 import { tirer, chocAvecEnnemis, hit, sauvegarderNouveauRecordEtAfficherInfos } from "/src/js/fonctions.js";
 
-var groupeBullets; 
-var groupe_ennemis; 
+var groupeBullets;
+var groupe_ennemis;
 var collision;
-var vague; 
+var vague;
 var vagueText;
 var scoreText;
 var chronoText;
@@ -21,148 +21,149 @@ export default class niveau1 extends Phaser.Scene {
 
   preload() {
 
-    this.load.image("vaisseau_marche", "src/assets/vaisseau_marche.png"); 
+    this.load.image("vaisseau_marche", "src/assets/vaisseau_marche.png");
     this.load.image("Tuiles_Terre", "src/assets/Tile_NiveauTerre.png");
-    this.load.tilemapTiledJSON("carte_terre", "src/assets/carte_terre.json"); 
+    this.load.tilemapTiledJSON("carte_terre", "src/assets/carte_terre.json");
     this.load.image("vaisseau_recule", "src/assets/vaisseau_recule.png");
     this.load.image("vaisseau_haut_2", "src/assets/vaisseau_haut_2.png");
     this.load.image("vaisseau_haut_gauche", "src/assets/vaisseau_haut_gauche.png");
     this.load.image("vaisseau_arrêt", "src/assets/vaisseau_arrêt.png");
   }
- 
+
   create() {
 
-      const carte_terre = this.add.tilemap("carte_terre");
-      const tileset = carte_terre.addTilesetImage("Tile_NiveauTerre","Tuiles_Terre");
-  
-      const Fond = carte_terre.createLayer(
-        "Fond",
-        tileset
-      );
-  
-      const Planete = carte_terre.createLayer(
-        "Planete",
-        tileset
-      );
-      
-      const Surface = carte_terre.createLayer(
-        "Surface",
-        tileset
-      );
+    const carte_terre = this.add.tilemap("carte_terre");
+    const tileset = carte_terre.addTilesetImage("Tile_NiveauTerre", "Tuiles_Terre");
 
-      const autre = carte_terre.createLayer(
-        "autre",
-        tileset
-      );
+    const Fond = carte_terre.createLayer(
+      "Fond",
+      tileset
+    );
 
-      const Ville = carte_terre.createLayer(
-        "Ville",
-        tileset
-      );
+    const Planete = carte_terre.createLayer(
+      "Planete",
+      tileset
+    );
 
-      const calque_ennemi = carte_terre.createLayer(
-        "ennemi",
-        tileset
-      )
+    const Surface = carte_terre.createLayer(
+      "Surface",
+      tileset
+    );
 
-      this.musique_fond = this.sound.add('musique_niveau1');
-      this.musique_fond.play();
+    const autre = carte_terre.createLayer(
+      "autre",
+      tileset
+    );
 
-      vague = 0;
-      vagueText = this.add.text(0, 40, "vague : " + vague, {
-        fontSize: "24px",
-        fill: "#FFFFFF" //Couleur de l'écriture
-      });
-      vagueText.setScrollFactor(0); 
+    const Ville = carte_terre.createLayer(
+      "Ville",
+      tileset
+    );
 
-      this.score = 0;
-      scoreText = this.add.text(0, 70, "score : " + this.score, {
-        fontSize: "24px",
-        fill: "#FFFFFF" //Couleur de l'écriture
-      });
-      scoreText.setScrollFactor(0); 
+    const calque_ennemi = carte_terre.createLayer(
+      "ennemi",
+      tileset
+    )
 
-      chrono = 30;
-      chronoText = this.add.text(0, 10, "Temps restant avant la prochaine vague : " + chrono + " secondes", {
-        fontSize: "24px",
-        fill: "#FFFFFF" //Couleur de l'écriture
-      });
-      chronoText.setScrollFactor(0);  
+    this.musique_fond = this.sound.add('musique_niveau1');
+    this.tir = this.sound.add('tir', { loop: false });
+    this.musique_fond.play();
 
-      monTimer = this.time.addEvent({
-        delay: 1000,
-        callback: function compteUneSeconde () {
-          chrono= chrono-1; // on incremente le chronometre d'une unite
-          chronoText.setText("Temps restant avant la prochaine vague : " + chrono + " secondes"); // mise à jour de l'affichage
-        },
-        callbackScope: this,
-        loop: true
-      });  
+    vague = 0;
+    vagueText = this.add.text(0, 40, "Vague : " + vague, {
+      fontSize: "24px",
+      fill: "#FFFFFF" //Couleur de l'écriture
+    });
+    vagueText.setScrollFactor(0);
 
-      this.player = this.physics.add.image(100, 450,"vaisseau_marche");
-      this.player.setCollideWorldBounds(true); 
-      this.player.setBounce(0.2);
+    this.score = 0;
+    scoreText = this.add.text(0, 70, "Score : " + this.score, {
+      fontSize: "24px",
+      fill: "#FFFFFF" //Couleur de l'écriture
+    });
+    scoreText.setScrollFactor(0);
 
-      this.player.vitesseMax = 800; // Vitesse maximale du vaisseau
-      this.player.acceleration = 7; // Accélération du vaisseau
+    chrono = 30;
+    chronoText = this.add.text(0, 10, "Temps restant avant la prochaine vague : " + chrono + " secondes", {
+      fontSize: "24px",
+      fill: "#FFFFFF" //Couleur de l'écriture
+    });
+    chronoText.setScrollFactor(0);
 
-      // redimensionnement du monde avec les dimensions calculées via tiled
-      this.physics.world.setBounds(0, 0, 6400, 610);
-      // ajout du champs de la caméra de taille identique à celle du monde
-      this.cameras.main.setBounds(0, 0, 6400, 610);
-      // ancrage de la caméra sur le joueur
-      this.cameras.main.startFollow(this.player);
-      this.player.setSize(128,64);
+    monTimer = this.time.addEvent({
+      delay: 1000,
+      callback: function compteUneSeconde() {
+        chrono = chrono - 1; // on incremente le chronometre d'une unite
+        chronoText.setText("Temps restant avant la prochaine vague : " + chrono + " secondes"); // mise à jour de l'affichage
+      },
+      callbackScope: this,
+      loop: true
+    });
 
- 
-      // creation d'un attribut direction pour le joueur, initialisée avec 'right'
-      this.player.direction = 'right';
-      
-      this.player.peutTirer = true; 
-  
-      groupeBullets = this.physics.add.group();
-  
-      this.clavier = this.input.keyboard.createCursorKeys(); 
-  
-      // affectation de la touche A à boutonFeu
-      this.boutonFeu = this.input.keyboard.addKey('A'); 
-  
-      // instructions pour les objets surveillés en bord de monde
-      this.physics.world.on("worldbounds", function(body) {
+    this.player = this.physics.add.image(100, 450, "vaisseau_marche");
+    this.player.setCollideWorldBounds(true);
+    this.player.setBounce(0.2);
+
+    this.player.vitesseMax = 800; // Vitesse maximale du vaisseau
+    this.player.acceleration = 7; // Accélération du vaisseau
+
+    // redimensionnement du monde avec les dimensions calculées via tiled
+    this.physics.world.setBounds(0, 0, 6400, 610);
+    // ajout du champs de la caméra de taille identique à celle du monde
+    this.cameras.main.setBounds(0, 0, 6400, 610);
+    // ancrage de la caméra sur le joueur
+    this.cameras.main.startFollow(this.player);
+    this.player.setSize(128, 64);
+
+
+    // creation d'un attribut direction pour le joueur, initialisée avec 'right'
+    this.player.direction = 'right';
+
+    this.player.peutTirer = true;
+
+    groupeBullets = this.physics.add.group();
+
+    this.clavier = this.input.keyboard.createCursorKeys();
+
+    // affectation de la touche A à boutonFeu
+    this.boutonFeu = this.input.keyboard.addKey('A');
+
+    // instructions pour les objets surveillés en bord de monde
+    this.physics.world.on("worldbounds", function (body) {
       // on récupère l'objet surveillé
       var objet = body.gameObject;
       // s'il s'agit d'une balle
       if (groupeBullets.contains(objet)) {
-          // on le détruit
-          objet.destroy();
+        // on le détruit
+        objet.destroy();
       }
     });
-      
+
     // extraction des poitns depuis le calque calque_ennemis, stockage dans tab_points
-    const tab_points = carte_terre.getObjectLayer("calque_ennemi");   
+    const tab_points = carte_terre.getObjectLayer("calque_ennemi");
     groupe_ennemis = this.physics.add.group();
 
     // on fait une boucle foreach, qui parcours chaque élements du tableau tab_points  
     tab_points.objects.forEach(point => {
-        if (point.name == "ennemi") {
-          var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_2");    
-          groupe_ennemis.add(nouvel_ennemi);
-        }
-     }); 
+      if (point.name == "ennemi") {
+        var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_2");
+        groupe_ennemis.add(nouvel_ennemi);
+      }
+    });
 
     groupe_ennemis.children.iterate(function iterateur(un_ennemi) {
-      un_ennemi.setCollideWorldBounds(true); 
+      un_ennemi.setCollideWorldBounds(true);
       un_ennemi.setBounce(1);
       un_ennemi.setVelocityX(Phaser.Math.Between(-500, 500));
       un_ennemi.setVelocityY(Phaser.Math.Between(-500, 500));
       un_ennemi.pointsVie = 1;
-    }); 
+    });
 
     this.physics.add.overlap(groupeBullets, groupe_ennemis, hit, null, this);
 
     var timerImmunite = this.time.delayedCall(3000,
       function () {
-         collision = this.physics.add.collider(this.player, groupe_ennemis, chocAvecEnnemis, null, this);
+        collision = this.physics.add.collider(this.player, groupe_ennemis, chocAvecEnnemis, null, this);
       },
       null, this);
 
@@ -171,17 +172,17 @@ export default class niveau1 extends Phaser.Scene {
       callback: function () {
         collision.destroy();
         vague++;
-        vagueText.setText("Level : " + vague);
+        vagueText.setText("Vague : " + vague);
         chrono = 30;
         console.log(vague);
         tab_points.objects.forEach((point, index) => {
           if (point.name === "ennemi") {
-              var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_2");
-              groupe_ennemis.add(nouvel_ennemi);
+            var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_2");
+            groupe_ennemis.add(nouvel_ennemi);
           }
         })
         let nb = 0;
-        while (nb < vague * 2){
+        while (nb < vague * 2) {
           tab_points.objects.forEach((point, index) => {
             if (point.name === "ennemi" && Phaser.Math.Between(1, 15) == 1) {
               var nouvel_ennemi = this.physics.add.sprite(point.x, point.y, "monstre_2");
@@ -191,7 +192,7 @@ export default class niveau1 extends Phaser.Scene {
           });
         }
         groupe_ennemis.children.iterate(function iterateur(un_ennemi) {
-          un_ennemi.setCollideWorldBounds(true); 
+          un_ennemi.setCollideWorldBounds(true);
           un_ennemi.setBounce(1);
           un_ennemi.setVelocityX(Phaser.Math.Between(-500, 500));
           un_ennemi.setVelocityY(Phaser.Math.Between(-500, 500));
@@ -200,98 +201,99 @@ export default class niveau1 extends Phaser.Scene {
         console.log(groupe_ennemis.getLength());
         var timerImmunite = this.time.delayedCall(3000,
           function () {
-             collision = this.physics.add.collider(this.player, groupe_ennemis, chocAvecEnnemis, null, this);
+            collision = this.physics.add.collider(this.player, groupe_ennemis, chocAvecEnnemis, null, this);
           },
           null, this);
       },
       args: [],
       callbackScope: this,
       repeat: -1
-    }); 
+    });
   }
 
   update() {
-  // Gestion des mouvements horizontaux
-  if (this.clavier.left.isDown) {
-    // Accélération progressive vers la gauche
-    this.player.setVelocityX(Math.max(this.player.body.velocity.x - this.player.acceleration, -this.player.vitesseMax));
-    this.player.setTexture("vaisseau_recule");
-    this.player.direction = 'left';
-  } else if (this.clavier.right.isDown) {
-    // Accélération progressive vers la droite
-    this.player.setVelocityX(Math.min(this.player.body.velocity.x + this.player.acceleration, this.player.vitesseMax));
-    this.player.setTexture("vaisseau_marche");
-    this.player.direction = 'right';
-  } else {
-    // Freinage progressif en cas de relâchement des touches horizontales
-    if (this.player.body.velocity.x > 0) {
-      this.player.setVelocityX(Math.max(this.player.body.velocity.x - 2 * this.player.acceleration, 0));
-      this.player.setTexture("vaisseau_marche");
-    } else if (this.player.body.velocity.x < 0) {
-      this.player.setVelocityX(Math.min(this.player.body.velocity.x + 2 * this.player.acceleration, 0));
+    // Gestion des mouvements horizontaux
+    if (this.clavier.left.isDown) {
+      // Accélération progressive vers la gauche
+      this.player.setVelocityX(Math.max(this.player.body.velocity.x - this.player.acceleration, -this.player.vitesseMax));
       this.player.setTexture("vaisseau_recule");
+      this.player.direction = 'left';
+    } else if (this.clavier.right.isDown) {
+      // Accélération progressive vers la droite
+      this.player.setVelocityX(Math.min(this.player.body.velocity.x + this.player.acceleration, this.player.vitesseMax));
+      this.player.setTexture("vaisseau_marche");
+      this.player.direction = 'right';
     } else {
-      // Ajout de la condition pour la texture lorsque le vaisseau est immobile horizontalement
-      if (this.player.direction === 'left') {
-        this.player.setTexture("vaisseau_arrêt_recule");
-      } else if (this.player.direction === 'right') {
-        this.player.setTexture("vaisseau_arrêt");
+      // Freinage progressif en cas de relâchement des touches horizontales
+      if (this.player.body.velocity.x > 0) {
+        this.player.setVelocityX(Math.max(this.player.body.velocity.x - 2 * this.player.acceleration, 0));
+        this.player.setTexture("vaisseau_marche");
+      } else if (this.player.body.velocity.x < 0) {
+        this.player.setVelocityX(Math.min(this.player.body.velocity.x + 2 * this.player.acceleration, 0));
+        this.player.setTexture("vaisseau_recule");
+      } else {
+        // Ajout de la condition pour la texture lorsque le vaisseau est immobile horizontalement
+        if (this.player.direction === 'left') {
+          this.player.setTexture("vaisseau_arrêt_recule");
+        } else if (this.player.direction === 'right') {
+          this.player.setTexture("vaisseau_arrêt");
+        }
       }
     }
-  }
 
-// Gestion des mouvements verticaux
-if (this.clavier.up.isDown) {
-  // Accélération progressive vers le haut
-  this.player.setVelocityY(Math.max(this.player.body.velocity.y - this.player.acceleration, -this.player.vitesseMax));
+    // Gestion des mouvements verticaux
+    if (this.clavier.up.isDown) {
+      // Accélération progressive vers le haut
+      this.player.setVelocityY(Math.max(this.player.body.velocity.y - this.player.acceleration, -this.player.vitesseMax));
 
-  // Ajout de la condition pour la texture lorsque le vaisseau monte
-  if (this.player.direction === 'left') {
-    this.player.setTexture("vaisseau_haut_gauche");
-  } else {
-    this.player.setTexture("vaisseau_haut_2");
-  }
-} else if (this.clavier.down.isDown) {
-  // Accélération progressive vers le bas
-  this.player.setVelocityY(Math.min(this.player.body.velocity.y + this.player.acceleration, this.player.vitesseMax));
+      // Ajout de la condition pour la texture lorsque le vaisseau monte
+      if (this.player.direction === 'left') {
+        this.player.setTexture("vaisseau_haut_gauche");
+      } else {
+        this.player.setTexture("vaisseau_haut_2");
+      }
+    } else if (this.clavier.down.isDown) {
+      // Accélération progressive vers le bas
+      this.player.setVelocityY(Math.min(this.player.body.velocity.y + this.player.acceleration, this.player.vitesseMax));
 
-  // Ajout de la condition pour la texture lorsque le vaisseau descend
-  if (this.player.direction === 'left') {
-    this.player.setTexture("vaisseau_haut_gauche");
-  } else {
-    this.player.setTexture("vaisseau_haut_2");
-  }
-} else {
-  // Freinage progressif en cas de relâchement des touches verticales
-  if (this.player.body.velocity.y > 0) {
-    this.player.setVelocityY(Math.max(this.player.body.velocity.y - 4 * this.player.acceleration, 0));
-  } else if (this.player.body.velocity.y < 0) {
-    this.player.setVelocityY(Math.min(this.player.body.velocity.y + 4 * this.player.acceleration, 0));
-  }
-
-  // Réinitialisation de la texture lorsque le vaisseau est immobile verticalement
-  if (this.clavier.left.isUp && this.clavier.right.isUp && this.clavier.up.isUp && this.clavier.down.isUp) {
-    if (this.player.direction === 'left') {
-      this.player.setTexture("vaisseau_arrêt_recule");
+      // Ajout de la condition pour la texture lorsque le vaisseau descend
+      if (this.player.direction === 'left') {
+        this.player.setTexture("vaisseau_haut_gauche");
+      } else {
+        this.player.setTexture("vaisseau_haut_2");
+      }
     } else {
-      this.player.setTexture("vaisseau_arrêt");
-    }
-  }
-}
+      // Freinage progressif en cas de relâchement des touches verticales
+      if (this.player.body.velocity.y > 0) {
+        this.player.setVelocityY(Math.max(this.player.body.velocity.y - 4 * this.player.acceleration, 0));
+      } else if (this.player.body.velocity.y < 0) {
+        this.player.setVelocityY(Math.min(this.player.body.velocity.y + 4 * this.player.acceleration, 0));
+      }
 
-    if ( Phaser.Input.Keyboard.JustDown(this.boutonFeu)) {
+      // Réinitialisation de la texture lorsque le vaisseau est immobile verticalement
+      if (this.clavier.left.isUp && this.clavier.right.isUp && this.clavier.up.isUp && this.clavier.down.isUp) {
+        if (this.player.direction === 'left') {
+          this.player.setTexture("vaisseau_arrêt_recule");
+        } else {
+          this.player.setTexture("vaisseau_arrêt");
+        }
+      }
+    }
+
+    if (Phaser.Input.Keyboard.JustDown(this.boutonFeu)) {
       if (this.player.peutTirer == true) {
         tirer(this.player, groupeBullets);
+        this.tir.play();
         this.player.peutTirer = false; // on désactive la possibilté de tirer
         // on la réactive dans 2 secondes avec un timer
         var timerTirOk = this.time.delayedCall(750,
-           function () {
+          function () {
             this.player.peutTirer = true;
-        },
-        null, this);  
-      } 
+          },
+          null, this);
+      }
     }
-    
+
 
     if (this.gameOver) {
       this.gameOver = false;
@@ -303,12 +305,12 @@ if (this.clavier.up.isDown) {
           this.score = 0;
           this.scene.start('finTerre');
         },
-        null, this);   
-    } 
+        null, this);
+    }
 
     console.log(this.score);
-    scoreText.setText("score : " + this.score);
+    scoreText.setText("Score : " + this.score);
 
   }
-  }
+}
 

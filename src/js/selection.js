@@ -6,9 +6,9 @@ import { tirer } from "/src/js/fonctions.js";
 
 var clavier; // pour la gestion du clavier
 // mise en place d'une variable boutonFeu
-var boutonFeu;  
+var boutonFeu;
 // mise en place d'une variable groupeBullets
-var groupeBullets;  
+var groupeBullets;
 
 var gameOver;
 
@@ -80,28 +80,29 @@ export default class selection extends Phaser.Scene {
     const calque_background_2 = carteDuNiveau.createLayer("Planète", tileset);
 
     this.musique_fond = this.sound.add('musique_selection');
+    this.tir = this.sound.add('tir', { loop: false });
     this.musique_fond.play();
 
     /****************************
     *  Ajout des Chiffres  *
     ****************************/
-  
+
     this.chiffre1 = this.physics.add.staticSprite(350, 330, "chiffre1");
     this.chiffre2 = this.physics.add.staticSprite(980, 330, "chiffre2");
     this.chiffre3 = this.physics.add.staticSprite(1600, 330, "chiffre3");
 
-    this.chiffre1.setScale(0.7); 
+    this.chiffre1.setScale(0.7);
     this.chiffre2.setScale(0.7);
     this.chiffre3.setScale(0.7);
 
     /****************************
     *  Ajout du player *
     ****************************/
-    this.player = this.physics.add.image(100, 450, "vaisseau_marche"); 
-    this.player.setSize(110,55);
+    this.player = this.physics.add.image(100, 450, "vaisseau_marche");
+    this.player.setSize(110, 55);
     this.player.setCollideWorldBounds(true);
     this.player.setBounce(0.2);
-    
+
     this.player.vitesseMax = 800; // Vitesse maximale du vaisseau
     this.player.acceleration = 7; // Accélération du vaisseau
 
@@ -113,26 +114,26 @@ export default class selection extends Phaser.Scene {
     this.cameras.main.startFollow(this.player);
 
     // creation d'un attribut direction pour le joueur, initialisée avec 'right'
-    this.player.direction = 'right'; 
+    this.player.direction = 'right';
 
-    this.player.peutTirer = true; 
+    this.player.peutTirer = true;
 
     // création d'un groupe d'éléments vide
     groupeBullets = this.physics.add.group();
 
-    clavier = this.input.keyboard.createCursorKeys(); 
+    clavier = this.input.keyboard.createCursorKeys();
 
     // affectation de la touche A à boutonFeu
-    boutonFeu = this.input.keyboard.addKey('A'); 
+    boutonFeu = this.input.keyboard.addKey('A');
 
     // instructions pour les objets surveillés en bord de monde
-    this.physics.world.on("worldbounds", function(body) {
+    this.physics.world.on("worldbounds", function (body) {
       // on récupère l'objet surveillé
       var objet = body.gameObject;
       // s'il s'agit d'une balle
       if (groupeBullets.contains(objet)) {
-          // on le détruit
-          objet.destroy();
+        // on le détruit
+        objet.destroy();
       }
     });
   }
@@ -142,107 +143,108 @@ export default class selection extends Phaser.Scene {
 /***********************************************************************/
 
   update() {
- 
-// Gestion des mouvements horizontaux
-if (clavier.left.isDown) {
-  // Accélération progressive vers la gauche
-  this.player.setVelocityX(Math.max(this.player.body.velocity.x - this.player.acceleration, -this.player.vitesseMax));
-  this.player.setTexture("vaisseau_recule");
-  this.player.direction = 'left';
-} else if (clavier.right.isDown) {
-  // Accélération progressive vers la droite
-  this.player.setVelocityX(Math.min(this.player.body.velocity.x + this.player.acceleration, this.player.vitesseMax));
-  this.player.setTexture("vaisseau_marche");
-  this.player.direction = 'right';
-} else {
-  // Freinage progressif en cas de relâchement des touches horizontales
-  if (this.player.body.velocity.x > 0) {
-    this.player.setVelocityX(Math.max(this.player.body.velocity.x - 2 * this.player.acceleration, 0));
-    this.player.setTexture("vaisseau_marche");
-  } else if (this.player.body.velocity.x < 0) {
-    this.player.setVelocityX(Math.min(this.player.body.velocity.x + 2 * this.player.acceleration, 0));
-    this.player.setTexture("vaisseau_recule");
-  } else {
-    // Ajout de la condition pour la texture lorsque le vaisseau est immobile horizontalement
-    if (this.player.direction === 'left') {
-      this.player.setTexture("vaisseau_arrêt_recule");
-    } else if (this.player.direction === 'right') {
-      this.player.setTexture("vaisseau_arrêt");
-    }
-  }
-}
 
-// Gestion des mouvements verticaux
-if (clavier.up.isDown) {
-  // Accélération progressive vers le haut
-  this.player.setVelocityY(Math.max(this.player.body.velocity.y - this.player.acceleration, -this.player.vitesseMax));
-
-  // Ajout de la condition pour la texture lorsque le vaisseau monte
-  if (this.player.direction === 'left') {
-    this.player.setTexture("vaisseau_haut_gauche");
-  } else {
-    this.player.setTexture("vaisseau_haut_2");
-  }
-} else if (clavier.down.isDown) {
-  // Accélération progressive vers le bas
-  this.player.setVelocityY(Math.min(this.player.body.velocity.y + this.player.acceleration, this.player.vitesseMax));
-
-  // Ajout de la condition pour la texture lorsque le vaisseau descend
-  if (this.player.direction === 'left') {
-    this.player.setTexture("vaisseau_haut_gauche");
-  } else {
-    this.player.setTexture("vaisseau_haut_2");
-  }
-} else {
-  // Freinage progressif en cas de relâchement des touches verticales
-  if (this.player.body.velocity.y > 0) {
-    this.player.setVelocityY(Math.max(this.player.body.velocity.y - 4 * this.player.acceleration, 0));
-  } else if (this.player.body.velocity.y < 0) {
-    this.player.setVelocityY(Math.min(this.player.body.velocity.y + 4 * this.player.acceleration, 0));
-  }
-
-  // Réinitialisation de la texture lorsque le vaisseau est immobile verticalement
-  if (clavier.left.isUp && clavier.right.isUp && clavier.up.isUp && clavier.down.isUp) {
-    if (this.player.direction === 'left') {
-      this.player.setTexture("vaisseau_arrêt_recule");
+    // Gestion des mouvements horizontaux
+    if (clavier.left.isDown) {
+      // Accélération progressive vers la gauche
+      this.player.setVelocityX(Math.max(this.player.body.velocity.x - this.player.acceleration, -this.player.vitesseMax));
+      this.player.setTexture("vaisseau_recule");
+      this.player.direction = 'left';
+    } else if (clavier.right.isDown) {
+      // Accélération progressive vers la droite
+      this.player.setVelocityX(Math.min(this.player.body.velocity.x + this.player.acceleration, this.player.vitesseMax));
+      this.player.setTexture("vaisseau_marche");
+      this.player.direction = 'right';
     } else {
-      this.player.setTexture("vaisseau_arrêt");
+      // Freinage progressif en cas de relâchement des touches horizontales
+      if (this.player.body.velocity.x > 0) {
+        this.player.setVelocityX(Math.max(this.player.body.velocity.x - 2 * this.player.acceleration, 0));
+        this.player.setTexture("vaisseau_marche");
+      } else if (this.player.body.velocity.x < 0) {
+        this.player.setVelocityX(Math.min(this.player.body.velocity.x + 2 * this.player.acceleration, 0));
+        this.player.setTexture("vaisseau_recule");
+      } else {
+        // Ajout de la condition pour la texture lorsque le vaisseau est immobile horizontalement
+        if (this.player.direction === 'left') {
+          this.player.setTexture("vaisseau_arrêt_recule");
+        } else if (this.player.direction === 'right') {
+          this.player.setTexture("vaisseau_arrêt");
+        }
+      }
     }
-  }
-}
+
+    // Gestion des mouvements verticaux
+    if (clavier.up.isDown) {
+      // Accélération progressive vers le haut
+      this.player.setVelocityY(Math.max(this.player.body.velocity.y - this.player.acceleration, -this.player.vitesseMax));
+
+      // Ajout de la condition pour la texture lorsque le vaisseau monte
+      if (this.player.direction === 'left') {
+        this.player.setTexture("vaisseau_haut_gauche");
+      } else {
+        this.player.setTexture("vaisseau_haut_2");
+      }
+    } else if (clavier.down.isDown) {
+      // Accélération progressive vers le bas
+      this.player.setVelocityY(Math.min(this.player.body.velocity.y + this.player.acceleration, this.player.vitesseMax));
+
+      // Ajout de la condition pour la texture lorsque le vaisseau descend
+      if (this.player.direction === 'left') {
+        this.player.setTexture("vaisseau_haut_gauche");
+      } else {
+        this.player.setTexture("vaisseau_haut_2");
+      }
+    } else {
+      // Freinage progressif en cas de relâchement des touches verticales
+      if (this.player.body.velocity.y > 0) {
+        this.player.setVelocityY(Math.max(this.player.body.velocity.y - 4 * this.player.acceleration, 0));
+      } else if (this.player.body.velocity.y < 0) {
+        this.player.setVelocityY(Math.min(this.player.body.velocity.y + 4 * this.player.acceleration, 0));
+      }
+
+      // Réinitialisation de la texture lorsque le vaisseau est immobile verticalement
+      if (clavier.left.isUp && clavier.right.isUp && clavier.up.isUp && clavier.down.isUp) {
+        if (this.player.direction === 'left') {
+          this.player.setTexture("vaisseau_arrêt_recule");
+        } else {
+          this.player.setTexture("vaisseau_arrêt");
+        }
+      }
+    }
 
     // ... (gestion des mouvements, collisions, etc.)
 
     if (Phaser.Input.Keyboard.JustDown(clavier.space)) {
 
       if (this.physics.overlap(this.player, this.chiffre2)) {
-          this.musique_fond.stop(); 
-          this.scene.switch("niveau2");
-        }
+        this.musique_fond.stop();
+        this.scene.switch("niveau2");
+      }
 
       if (this.physics.overlap(this.player, this.chiffre3)) {
-          this.musique_fond.stop(); 
-          this.scene.switch("niveau3");
-        }
+        this.musique_fond.stop();
+        this.scene.switch("niveau3");
+      }
 
       if (this.physics.overlap(this.player, this.chiffre1)) {
-          this.musique_fond.stop(); 
-          this.scene.switch("niveau1");
-        }
-        
+        this.musique_fond.stop();
+        this.scene.switch("niveau1");
+      }
+
     }
 
-    if ( Phaser.Input.Keyboard.JustDown(boutonFeu)) {
+    if (Phaser.Input.Keyboard.JustDown(boutonFeu)) {
       if (this.player.peutTirer == true) {
         tirer(this.player, groupeBullets);
+        this.tir.play();
         this.player.peutTirer = false; // on désactive la possibilté de tirer
         // on la réactive dans 2 secondes avec un timer
         var timerTirOk = this.time.delayedCall(1000,
-           function () {
+          function () {
             this.player.peutTirer = true;
-        },
-        null, this);  
+          },
+          null, this);
       }
-    }  
+    }
   }
 }

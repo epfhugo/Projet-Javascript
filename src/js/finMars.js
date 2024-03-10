@@ -32,25 +32,25 @@ export default class finMars extends Phaser.Scene {
    */
   create() {
 
-    this.musique_fond = this.sound.add('musique_menu'); 
-    this.musique_fond.play(); 
+    this.musique_fond = this.sound.add('musique_menu');
+    this.musique_fond.play();
 
-    this.add.image(0, 0).setOrigin(0).setDepth(0).setScale(60,19);
+    this.add.image(0, 0).setOrigin(0).setDepth(0).setScale(60, 19);
 
     var fond = this.add.image(960, 300, "fond").setDepth(2);
-    fond.setScale(1.5,1.5);
+    fond.setScale(1.5, 1.5);
 
     var mars = this.add.image(920, 300, "mars").setDepth(2);
-    mars.setScale(1,1);
+    mars.setScale(1, 1);
 
     var monstre2 = this.add.image(350, 300, "monstre_2").setDepth(2);
-    monstre2.setScale(2,2);
+    monstre2.setScale(2, 2);
 
     var monstre22 = this.add.image(1450, 300, "monstre_2").setDepth(2);
-    monstre22.setScale(2,2);
+    monstre22.setScale(2, 2);
 
     var bouton_quit = this.add.image(920, 300, "bouton_quit").setDepth(2);
-    bouton_quit.setScale(1,1);
+    bouton_quit.setScale(1, 1);
     bouton_quit.setInteractive();
 
     bouton_quit.on("pointerover", () => {
